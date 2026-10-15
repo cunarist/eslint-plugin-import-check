@@ -113,10 +113,46 @@ interface ImportEntry {
 }
 
 /**
- * Builds the whole-block rewrite, but only when nothing would be lost.
- * Comments inside the block have no home in the rewritten text, and
- * statements interleaved between imports would be erased by a single range
- * replacement, so both cases give `null` and report without a fix.
+ * Whether an import only runs a module for its side effects, as in
+ * `import "./polyfill.ts";`. Such imports can depend on running before or
+ * after their neighbours, so the fix never moves them.
+ */
+function isSideEffect(node: TSESTree.ImportDeclaration): boolean {
+  return node.specifiers.length === 0;
+}
+
+/** Sorts imports by group, then by specifier. */
+function compareEntries(a: ImportEntry, b: ImportEntry): number {
+  return a.group - b.group || compareSpecifiers(a.specifier, b.specifier);
+}
+
+/**
+ * The imports in their fixed order: side-effect imports keep their places,
+ * and the imports in each run between them are sorted within that run, so no
+ * import crosses a side-effect import.
+ */
+function fixedOrder(entries: ImportEntry[]): ImportEntry[] {
+  const ordered: ImportEntry[] = [];
+  let run: ImportEntry[] = [];
+  for (const entry of entries) {
+    if (isSideEffect(entry.node)) {
+      ordered.push(...run.toSorted(compareEntries), entry);
+      run = [];
+    } else {
+      run.push(entry);
+    }
+  }
+  ordered.push(...run.toSorted(compareEntries));
+  return ordered;
+}
+
+/**
+ * Builds the whole-block rewrite, but only when nothing would be lost and the
+ * rewrite changes something. Comments inside the block have no home in the
+ * rewritten text, and statements interleaved between imports would be erased
+ * by a single range replacement, so both cases give `null` and report
+ * without a fix. When only side-effect imports are out of place, nothing may
+ * move, so that gives `null` too.
  */
 function fixImportBlock(
   source: ExplicitSourceCode,
@@ -134,17 +170,17 @@ function fixImportBlock(
   if (!contiguous || hasCommentWithin(source, start, end)) {
     return null;
   }
-  const sorted = entries.toSorted(
-    (a, b) => a.group - b.group || compareSpecifiers(a.specifier, b.specifier),
-  );
   let replacement = "";
   let previousGroup: number | null = null;
-  for (const entry of sorted) {
+  for (const entry of fixedOrder(entries)) {
     if (previousGroup !== null) {
       replacement += entry.group === previousGroup ? "\n" : "\n\n";
     }
     replacement += source.getText(entry.node);
     previousGroup = entry.group;
+  }
+  if (replacement === source.text.slice(start, end)) {
+    return null;
   }
   return (fixer): RuleTextEdit => fixer.replaceTextRange([start, end], replacement);
 }
@@ -196,7 +232,8 @@ function orderProblem(
  * modifier.
  *
  * The fix rewrites the import block, unless a comment or another statement
- * sits between the imports, so nothing gets discarded.
+ * sits between the imports, so nothing gets discarded. Side-effect imports
+ * stay where they are and no import is moved across one.
  */
 export const enforceImportOrderRule: ExplicitRule = {
   meta: {

@@ -69,6 +69,27 @@ testRule("enforce-import-order", enforceImportOrderRule, {
       errors: [{ messageId: "extraBlankLine" }],
     },
 
+    // keeps a side-effect import in place and sorts around it
+    {
+      code: 'import { b } from "#components";\nimport "./setup.ts";\nimport { a } from "zod";\n',
+      output:
+        'import { b } from "#components";\n\nimport "./setup.ts";\n\nimport { a } from "zod";\n',
+      errors: [{ messageId: "missingBlankLine", data: { previous: ALIAS, group: RELATIVE } }],
+    },
+
+    // sorts the imports before a side-effect import without moving it
+    {
+      code: 'import { z } from "zod";\nimport { a } from "@scope/pkg";\nimport "./setup.ts";\n',
+      output: 'import { a } from "@scope/pkg";\nimport { z } from "zod";\n\nimport "./setup.ts";\n',
+      errors: [{ messageId: "sourceOrder", data: { specifier: "@scope/pkg", previous: "zod" } }],
+    },
+
+    // reports without a fix when only side-effect imports are out of place
+    {
+      code: 'import { a } from "zod";\n\nimport "./setup.ts";\n\nimport "#polyfill";\n',
+      errors: [{ messageId: "groupOrder", data: { group: ALIAS, previous: RELATIVE } }],
+    },
+
     // sorts names inside the braces
     {
       code: memberCode,

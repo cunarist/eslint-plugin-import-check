@@ -25,6 +25,10 @@ statement.
 - One problem is reported per file. The fix rewrites the whole import block,
   or the one brace list, unless a comment or another statement sits inside it;
   then it reports without a fix, so nothing gets discarded.
+- A side-effect import, such as `import "./setup.ts";`, may need to run
+  before or after its neighbours, so the fix never moves it or moves another
+  import across it. It still counts for the order, and a problem only moving
+  it would solve is reported without a fix.
 - Do not run another import sorter, such as Oxfmt's `sortImports`, beside this
   rule: two sorters that disagree undo each other's fixes.
 
