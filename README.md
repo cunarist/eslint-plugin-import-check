@@ -8,7 +8,9 @@ Install with `npm install --save-dev @cunarist/eslint-plugin-import-check`. Requ
 import plugin from "@cunarist/eslint-plugin-import-check";
 import { defineConfig } from "vite-plus";
 const rules = { ...plugin.configs["import-check"].rules };
-export default defineConfig({ lint: { jsPlugins: [plugin.meta.name], rules } });
+export default defineConfig({
+  lint: { jsPlugins: ["@cunarist/eslint-plugin-import-check"], rules },
+});
 ```
 
 ```ts
