@@ -69,12 +69,21 @@ testRule("enforce-import-order", enforceImportOrderRule, {
       errors: [{ messageId: "extraBlankLine" }],
     },
 
-    // keeps a side-effect import in place and sorts around it
+    // reports without a fix when only moving a side-effect import would help
     {
       code: 'import { b } from "#components";\nimport "./setup.ts";\nimport { a } from "zod";\n',
-      output:
-        'import { b } from "#components";\n\nimport "./setup.ts";\n\nimport { a } from "zod";\n',
       errors: [{ messageId: "missingBlankLine", data: { previous: ALIAS, group: RELATIVE } }],
+    },
+    {
+      code: 'import "./setup.ts";\nimport { a } from "zod";\n',
+      errors: [{ messageId: "groupOrder", data: { group: PACKAGE, previous: RELATIVE } }],
+    },
+
+    // keeps a side-effect import in place and fixes the blank lines around it
+    {
+      code: 'import { a } from "zod";\nimport "./setup.ts";\n',
+      output: 'import { a } from "zod";\n\nimport "./setup.ts";\n',
+      errors: [{ messageId: "missingBlankLine", data: { previous: PACKAGE, group: RELATIVE } }],
     },
 
     // sorts the imports before a side-effect import without moving it
@@ -122,6 +131,18 @@ testRule("enforce-import-order", enforceImportOrderRule, {
       code: 'import plugin, { zebra, apple } from "#lint";\n',
       output: 'import plugin, { apple, zebra } from "#lint";\n',
       errors: [{ messageId: "memberOrder" }],
+    },
+
+    // reports without a fix when the first name shares the line with the brace
+    {
+      code: 'import { zeta,\n  alpha } from "#paths";\n',
+      errors: [{ messageId: "memberOrder", data: { name: "alpha", previous: "zeta" } }],
+    },
+
+    // reports without a fix when a comment follows the last name
+    {
+      code: 'import {\n  zeta,\n  alpha, // Why alpha.\n} from "#paths";\n',
+      errors: [{ messageId: "memberOrder", data: { name: "alpha", previous: "zeta" } }],
     },
 
     // reports without a fix when a comment sits inside the braces

@@ -78,10 +78,13 @@ function hasCommentWithin(source: ExplicitSourceCode, start: number, end: number
 /**
  * Rewrites the braces of one import in sorted order, preserving whether the
  * list was written on one line or spread across several. `null` when a
- * comment inside the braces would be lost.
+ * comment anywhere in the import could end up beside a different member, or
+ * when a multiline list does not start its first member on a line of its
+ * own, since there is no indent to reuse.
  */
 function fixMemberOrder(
   source: ExplicitSourceCode,
+  node: TSESTree.ImportDeclaration,
   members: TSESTree.ImportSpecifier[],
 ): RuleFixer | null {
   const first = members.at(0);
@@ -91,7 +94,7 @@ function fixMemberOrder(
   }
   const start = first.range[0];
   const end = last.range[1];
-  if (hasCommentWithin(source, start, end)) {
+  if (hasCommentWithin(source, node.range[0], node.range[1])) {
     return null;
   }
   const text = source.text;
@@ -99,7 +102,11 @@ function fixMemberOrder(
   // Match the existing layout rather than reflowing it, so a list the
   // formatter already broke across lines stays broken.
   const multiline = text.slice(start, end).includes("\n");
-  const indent = multiline ? text.slice(text.lastIndexOf("\n", start) + 1, start) : "";
+  const lead = text.slice(text.lastIndexOf("\n", start) + 1, start);
+  if (multiline && lead.trim() !== "") {
+    return null;
+  }
+  const indent = multiline ? lead : "";
   const separator = multiline ? `,\n${indent}` : ", ";
   const replacement = sorted.map((member) => source.getText(member)).join(separator);
   return (fixer): RuleTextEdit => fixer.replaceTextRange([start, end], replacement);
@@ -147,12 +154,23 @@ function fixedOrder(entries: ImportEntry[]): ImportEntry[] {
 }
 
 /**
+ * Whether imports are in group order and sorted within each group, which is
+ * what the rewrite needs to clear every order problem.
+ */
+function isSorted(entries: ImportEntry[]): boolean {
+  return entries.every((entry, index) => {
+    const previous = entries[index - 1];
+    return previous === undefined || compareEntries(previous, entry) <= 0;
+  });
+}
+
+/**
  * Builds the whole-block rewrite, but only when nothing would be lost and the
  * rewrite changes something. Comments inside the block have no home in the
  * rewritten text, and statements interleaved between imports would be erased
  * by a single range replacement, so both cases give `null` and report
- * without a fix. When only side-effect imports are out of place, nothing may
- * move, so that gives `null` too.
+ * without a fix. So does a block that cannot be put fully in order without
+ * moving a side-effect import, rather than fixing it halfway.
  */
 function fixImportBlock(
   source: ExplicitSourceCode,
@@ -170,17 +188,18 @@ function fixImportBlock(
   if (!contiguous || hasCommentWithin(source, start, end)) {
     return null;
   }
+  const ordered = fixedOrder(entries);
+  if (!isSorted(ordered)) {
+    return null;
+  }
   let replacement = "";
   let previousGroup: number | null = null;
-  for (const entry of fixedOrder(entries)) {
+  for (const entry of ordered) {
     if (previousGroup !== null) {
       replacement += entry.group === previousGroup ? "\n" : "\n\n";
     }
     replacement += source.getText(entry.node);
     previousGroup = entry.group;
-  }
-  if (replacement === source.text.slice(start, end)) {
-    return null;
   }
   return (fixer): RuleTextEdit => fixer.replaceTextRange([start, end], replacement);
 }
@@ -274,7 +293,7 @@ export const enforceImportOrderRule: ExplicitRule = {
             if (compareMembers(name, previous) >= 0) {
               continue;
             }
-            const fix = fixMemberOrder(source, members);
+            const fix = fixMemberOrder(source, node, members);
             context.report({
               node: member,
               messageId: "memberOrder",
