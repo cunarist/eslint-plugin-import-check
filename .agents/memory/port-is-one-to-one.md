@@ -5,7 +5,8 @@ description: The plugin holds exactly the 11 lint rules of jsr:@cunarist/deno-im
 Ported from `jsr:@cunarist/deno-import-check` 0.9.0, its `./lint` entry
 (`src/lint.ts`) only. The published plugin holds exactly its 11 rules under the
 same names, nothing added or removed; `tests/configs.test.ts` pins the list.
-Anything that cannot be 1:1 is flagged to the user, not decided.
+Anything that cannot be 1:1 is flagged to the user, not decided
+([[plugin-port-exact-deno-rules]]).
 
 **The CLI was not ported.** It resolved the whole module graph with
 `@deno/loader` and reported cycles, `#` aliases sharing a target, and unused

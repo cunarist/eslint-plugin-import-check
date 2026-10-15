@@ -23,11 +23,11 @@ Why not the alternatives, all checked:
   `RuleFunction<never>`).
 - Oxlint's `Rule` type would make the package depend on `@oxlint/plugins`.
 
-The public `.d.ts` inlines the few `@eslint/core` types it needs; `vp pack`
-reports that as "Detected dependencies in bundle", which `pack.deps.onlyBundle`
-in `vite.config.ts` acknowledges.
+The public `dist/index.d.ts` imports `ConfigObject` and `Plugin` from
+`@eslint/core`, so it is the one entry in `dependencies` (types only, as in
+the template); there is no `pack.deps` setting in `vite.config.ts`.
 
 Messages are one ESLint-style sentence. ESLint and Oxlint diagnostics have no
 hint field, so Deno's hints moved to the rule docs, or into a suggestion's
 message where a suggestion exists. Report with `messageId` and `data`
-so tests can assert which message fired. See [[dual-ruletester]].
+so tests can assert which message fired. See [[plugin-dual-ruletester]] and [[plugin-messages-and-fixes]].

@@ -13,6 +13,7 @@ The Deno config of this repo differed. Beyond the tags it included
 `jsr:@hugoalh/deno-lint-rules@0.8.3/recommended` (excluding
 `hugoalh/no-duplicate-imports` and `hugoalh/no-import-self`). None of those
 three was mapped to an Oxlint rule in the port; that gap is open, not decided.
-Before removing a line from `configs.project`, find what else covers it.
+Before removing a line from `configs.project`, find what else covers it
+([[lint-parity-never-shrinks]]).
 
 `maxWarnings: 0` keeps Deno's every-diagnostic-fails behaviour.
