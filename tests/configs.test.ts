@@ -1,0 +1,41 @@
+import { describe, expect, it } from "vite-plus/test";
+
+import plugin from "#plugin";
+
+const NAMESPACE = "@cunarist/import-check";
+
+/**
+ * The rules of the Deno plugin this one ports, and nothing else. A repo-only
+ * rule goes in `scripts/project-lint.ts`, never in the published plugin.
+ */
+const DENO_RULES: string[] = [
+  "enforce-import-order",
+  "enforce-layer-order",
+  "enforce-mod-file",
+  "no-absolute-import",
+  "no-barrel-bypass",
+  "no-duplicate-import-source",
+  "no-parent-import",
+  "no-relative-bypass",
+  "no-self-import",
+  "no-wildcard-import",
+  "prefer-alias-import",
+];
+
+describe("plugin.rules", () => {
+  it("holds exactly the 11 rules of the Deno plugin", () => {
+    expect(Object.keys(plugin.rules ?? {}).toSorted()).toEqual(DENO_RULES);
+  });
+});
+
+describe("plugin.configs.all", () => {
+  it("turns on every rule in the plugin", () => {
+    expect(Object.keys(plugin.configs.all.rules ?? {})).toHaveLength(11);
+    const ruleIds = Object.keys(plugin.rules ?? {}).map((id) => `${NAMESPACE}/${id}`);
+    expect(Object.keys(plugin.configs.all.rules ?? {}).toSorted()).toEqual(ruleIds.toSorted());
+  });
+
+  it("equals the import-check config, the only Deno plugin", () => {
+    expect(plugin.configs.all.rules).toEqual(plugin.configs["import-check"].rules);
+  });
+});

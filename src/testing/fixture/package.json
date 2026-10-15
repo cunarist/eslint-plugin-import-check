@@ -1,0 +1,11 @@
+{
+  "imports": {
+    "#app-store": "./src/app-store.ts",
+    "#components": "./src/components/index.ts",
+    "#components/*": "./src/components/*",
+    "#utils": "./src/utils/index.ts",
+    "#types": "./src/types/index.ts",
+    "#lit": "lit",
+    "#/*": "./src/*"
+  }
+}
