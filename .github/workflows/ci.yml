@@ -45,6 +45,9 @@ jobs:
         run: vp test -t " eslint "
       - name: Rule tests under Oxlint's RuleTester
         run: vp test -t " oxlint "
+      # Unit tests of the shared helpers, which no rule tester runs.
+      - name: Helper tests
+        run: vp test src/helpers
       # Regression tests in tests/, against the public entry only.
       - name: Regression tests
         run: vp test tests
