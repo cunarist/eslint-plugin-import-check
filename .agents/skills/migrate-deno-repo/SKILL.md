@@ -12,12 +12,14 @@ Branch `node-migration` (apps) or `initial-port` (new plugin repos); one PR
 with everything.
 
 **Inventory first**
+
 - [ ] List every `deno.json` task, import-map entry, lint rule (tags,
       includes, `@hugoalh`, custom plugins), test, `Deno.*` call, JSON/CSS/SVG
       import, and every place the output is consumed (Rust, HTML,
       Containerfile, CI).
 
 **Toolchain**
+
 - [ ] `package.json` in the required key order, `engines.node ">=22"`, no
       `packageManager`, no `peerDependencies`; `npm install`; commit
       `package-lock.json`.
@@ -28,6 +30,7 @@ with everything.
       patterns for trailing-slash mappings); `jsr:`/`npm:` → npm packages.
 
 **Code**
+
 - [ ] Only `.ts` files; no non-`.ts` imports: CSS via `<link>`, JSON and SVG
       as `.ts` modules, icons in memona's style.
 - [ ] `Deno.*` → `node:*` / `process`. Generated JS written as `.ts`, built,
@@ -37,15 +40,18 @@ with everything.
       lit-check`.
 
 **Lint**
+
 - [ ] `scripts/project-lint.ts` copied; old local Deno lint rules ported into
       it; parity mapping for every former rule; `id-match`; no disable
       comments; no source `overrides`; refactor size-rule hits.
 
 **Tests**
+
 - [ ] `Deno.test` → Vitest (codemod, then finish TODOs); unit tests next to
       code, integration in `tests/`; no case dropped.
 
 **Build, ship, CI**
+
 - [ ] `vp build` in app mode with the same output paths, or `vp pack` for
       packages. Containerfile node stage on `node:24-alpine`. CI with
       `setup-vp`: `vp check`, build, `vp test` (+ lit-check). Packages:
@@ -55,6 +61,7 @@ with everything.
       clean.
 
 **Finish**
+
 - [ ] `vp check`, `vp test`, build all pass locally; the app runs.
 - [ ] Commit in plain imperative sentences; open the PR (summary, changes,
       parity mapping, deviations/risks, "CI fails until @cunarist/eslint-plugin-*

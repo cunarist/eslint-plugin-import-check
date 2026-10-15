@@ -21,14 +21,14 @@ practice.
 Oxlint's defaults stay; violations are refactored without behavior change,
 covered by the tests, inside the same migration PR.
 
-| Rule                     | Usual fix                                               |
-| ------------------------ | ------------------------------------------------------- |
-| `import/max-dependencies` | import a barrel (`#ui`) instead of many direct modules |
-| `max-lines`              | split the file by responsibility                        |
-| `max-lines-per-function` | extract helpers; split a long Lit template into parts   |
-| `max-classes-per-file`   | one class per file                                      |
-| `max-params`             | pass one options object                                 |
-| `prefer-set-has`         | `const K: ReadonlySet<string> = new Set([...])`, `.has` |
+| Rule                      | Usual fix                                               |
+| ------------------------- | ------------------------------------------------------- |
+| `import/max-dependencies` | import a barrel (`#ui`) instead of many direct modules  |
+| `max-lines`               | split the file by responsibility                        |
+| `max-lines-per-function`  | extract helpers; split a long Lit template into parts   |
+| `max-classes-per-file`    | one class per file                                      |
+| `max-params`              | pass one options object                                 |
+| `prefer-set-has`          | `const K: ReadonlySet<string> = new Set([...])`, `.has` |
 
 ```ts
 // before: 14 imports, over the limit of 10

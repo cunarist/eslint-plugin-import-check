@@ -10,7 +10,7 @@ exactly as the Deno code had them. No legacy decorators.
 ```ts
 @customElement("app-card")
 export class AppCard extends LitElement {
-  @property() accessor name = "";   // keep this form
+  @property() accessor name = ""; // keep this form
 }
 ```
 
@@ -33,12 +33,12 @@ It is tooling under `scripts/`: no tests, and it must pass every lint rule.
 
 **The options as presented to the user:**
 
-| Option | What | Why not |
-| --- | --- | --- |
-| A | Legacy decorators: two tsconfig flags (`experimentalDecorators`, ...) and a codemod removing `accessor` | the user ruled out legacy decorators |
-| B | Wait for Oxc to lower `accessor` decorators | not available yet; blocks the migration |
-| C | No decorators: `static properties = {...}` + `declare` fields | rewrites every component |
-| D | A transform step in the Vite build | chosen, with esbuild as the transformer (above) |
+| Option | What                                                                                                    | Why not                                         |
+| ------ | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| A      | Legacy decorators: two tsconfig flags (`experimentalDecorators`, ...) and a codemod removing `accessor` | the user ruled out legacy decorators            |
+| B      | Wait for Oxc to lower `accessor` decorators                                                             | not available yet; blocks the migration         |
+| C      | No decorators: `static properties = {...}` + `declare` fields                                           | rewrites every component                        |
+| D      | A transform step in the Vite build                                                                      | chosen, with esbuild as the transformer (above) |
 
 Don't add `experimentalDecorators` to `tsconfig.json`, and don't strip
 `accessor` from fields.

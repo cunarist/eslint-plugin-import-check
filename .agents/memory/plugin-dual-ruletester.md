@@ -15,9 +15,9 @@ It runs every case twice in Vitest:
 Suites nest as `<rule> > eslint|oxlint`, so CI can run each host separately:
 
 ```yaml
-- run: vp test -t " eslint "   # leading space matters: a name starting
-- run: vp test -t " oxlint "   # with the host would match neither step
-- run: vp test tests           # regression tests
+- run: vp test -t " eslint " # leading space matters: a name starting
+- run: vp test -t " oxlint " # with the host would match neither step
+- run: vp test tests # regression tests
 ```
 
 CI matrix: node `22` (the minimum) and `latest`; no LTS entry, no Bun (Oxlint's

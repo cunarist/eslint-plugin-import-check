@@ -12,6 +12,7 @@ the generated header:
 <!-- end auto-generated rule header -->
 
 ## Rule Details
+
 What failure it prevents and why the alternative removes it; bullets for the
 edges (what it does not fire on, what it can't see).
 
@@ -21,7 +22,7 @@ Examples of **incorrect** code for this rule:
 Examples of **correct** code for this rule:
 (one ts block)
 
-## Options          <- only if the rule has options
+## Options <- only if the rule has options
 
 ## When Not To Use It
 ```

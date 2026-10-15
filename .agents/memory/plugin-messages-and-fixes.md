@@ -39,7 +39,7 @@ export const noKeyofRule: ExplicitRule = {
 ## Autofix vs suggestion (2026-10-14)
 
 - **Autofix** (`meta.fixable` + `fix` in `context.report`) only when the
-  change is safe for behavior *and* types in every case the rule reports.
+  change is safe for behavior _and_ types in every case the rule reports.
 - **Suggestion** (`meta.hasSuggestions` + `suggest`) when a fix is plausible
   but needs a human's judgment, or is unsafe in some cases.
 - **Nothing** when no fix is reliably right.

@@ -21,14 +21,14 @@ Rules and plugin stay in this one file; don't add `scripts/rules/`.
 import type { DummyRuleMap } from "vite-plus/lint";
 
 const rules: DummyRuleMap = {
-  "id-match": ["error", "^_*[^_]*_*$|^[^a-z]*$", { /* ... */ }],
+  "id-match": ["error", "^_*[^_]*_*$|^[^a-z]*$", {/* ... */}],
   curly: "error",
   "project/no-disable-comments": "error",
 };
 
 const plugin = {
   meta: { name: "project" },
-  rules: { "no-disable-comments": noDisableCommentsRule, /* ... */ },
+  rules: { "no-disable-comments": noDisableCommentsRule /* ... */ },
   configs: { project: { rules } },
 };
 export default plugin;

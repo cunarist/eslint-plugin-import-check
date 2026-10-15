@@ -6,11 +6,11 @@ User decision (2026-10-15): each npm plugin contains **exactly** the rules of
 the original Deno plugin: same rule names, same behavior, none added, none
 removed. `tests/configs.test.ts` pins the rule list.
 
-| npm package | Deno source | Rules | Configs |
-| --- | --- | --- | --- |
-| `@cunarist/eslint-plugin-explicit-types` | `deno-lint-plugin-explicit-types` 0.5.1 | 15 | `concrete`, `naming`, `absence`, `all` |
-| `@cunarist/eslint-plugin-import-check` | `deno-import-check` 0.9.0, `./lint` only | 11 | `import-check`, `all` |
-| `@cunarist/eslint-plugin-lit` | `deno-lint-plugin-lit` 0.7.1 | 82 | `core`, `strict`, `dom-ref`, `reactive-controller`, `naming`, `all` |
+| npm package                              | Deno source                              | Rules | Configs                                                             |
+| ---------------------------------------- | ---------------------------------------- | ----- | ------------------------------------------------------------------- |
+| `@cunarist/eslint-plugin-explicit-types` | `deno-lint-plugin-explicit-types` 0.5.1  | 15    | `concrete`, `naming`, `absence`, `all`                              |
+| `@cunarist/eslint-plugin-import-check`   | `deno-import-check` 0.9.0, `./lint` only | 11    | `import-check`, `all`                                               |
+| `@cunarist/eslint-plugin-lit`            | `deno-lint-plugin-lit` 0.7.1             | 82    | `core`, `strict`, `dom-ref`, `reactive-controller`, `naming`, `all` |
 
 - **A rule this repo needs only for itself** (Deno parity, self-lint) goes in
   `scripts/project-lint.ts`, never in the published plugin

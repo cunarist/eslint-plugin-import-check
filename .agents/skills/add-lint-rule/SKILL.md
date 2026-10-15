@@ -39,6 +39,7 @@ Use a new branch and PR. For a rule id `my-rule` (kebab-case):
 
    This writes the doc header and the README rules list. Keep the README
    under 60 lines.
+
 7. **Verify** before pushing:
 
    ```sh
@@ -49,5 +50,6 @@ Use a new branch and PR. For a rule id `my-rule` (kebab-case):
 
    The repo lints itself with the new rule at once; fix any hits in the
    source, never with disable comments or overrides.
+
 8. Open the PR and run the `review-cycle` skill. A new rule is a minor bump
    before 1.0 when it ships in an existing config.

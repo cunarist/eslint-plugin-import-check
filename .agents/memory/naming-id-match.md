@@ -18,11 +18,11 @@ letter. `id-match` can't tell what kind of name it sees, so one regex accepts
 every valid style; other rules decide which style goes where.
 
 ```ts
-const userName = 1;       // ok
-class UserStore {}        // ok here; pascal-case-types enforces PascalCase
-const MAX_SIZE = 10;      // ok: no lowercase, so UPPER_SNAKE passes
-const _unused = 1;        // ok: leading _ marks an unused binding
-const user_name = 1;      // error
+const userName = 1; // ok
+class UserStore {} // ok here; pascal-case-types enforces PascalCase
+const MAX_SIZE = 10; // ok: no lowercase, so UPPER_SNAKE passes
+const _unused = 1; // ok: leading _ marks an unused binding
+const user_name = 1; // error
 ```
 
 - **Leading underscores stay allowed** for unused parameters and variables

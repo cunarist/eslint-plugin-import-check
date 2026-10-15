@@ -25,10 +25,10 @@ Bare packages (`lit`, `@types/json-schema`, `lodash.debounce`), `#` aliases,
 and `node:` builtins pass. `@fortawesome/x/svgs/a.svg` fails.
 
 ```ts
-import "./theme.css";                                  // no
+import "./theme.css"; // no
 import data from "./scenes.json" with { type: "json" }; // no
-import icon from "./lock.svg?raw";                     // no
-import { scenes } from "#data/scenes";                 // yes: scenes.ts
+import icon from "./lock.svg?raw"; // no
+import { scenes } from "#data/scenes"; // yes: scenes.ts
 ```
 
 ## What to do instead

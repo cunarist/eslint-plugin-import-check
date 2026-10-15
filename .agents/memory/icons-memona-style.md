@@ -11,8 +11,11 @@ import { html, type TemplateResult } from "lit";
 
 /** Font Awesome Free's solid `lock`, as its SVG source. */
 export const lockIcon: TemplateResult = html`<svg
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-  <path fill="currentColor" d="M128 96l0 64 ..."/></svg>`;
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 384 512"
+>
+  <path fill="currentColor" d="M128 96l0 64 ..." />
+</svg>`;
 ```
 
 ```ts

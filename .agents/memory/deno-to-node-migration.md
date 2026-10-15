@@ -33,8 +33,8 @@ included.
 
 The custom plugins' Deno names map like this:
 
-| Deno                                   | npm                                     |
-| -------------------------------------- | --------------------------------------- |
+| Deno                                            | npm                                      |
+| ----------------------------------------------- | ---------------------------------------- |
 | `jsr:@cunarist/deno-lint-plugin-explicit-types` | `@cunarist/eslint-plugin-explicit-types` |
 | `jsr:@cunarist/deno-import-check` (`./lint`)    | `@cunarist/eslint-plugin-import-check`   |
 | `jsr:@cunarist/deno-lint-plugin-lit`            | `@cunarist/eslint-plugin-lit`            |

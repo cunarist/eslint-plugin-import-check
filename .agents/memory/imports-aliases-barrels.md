@@ -16,7 +16,7 @@ directory:
 ```
 
 ```ts
-import { typeNameTail } from "#helpers";        // yes
+import { typeNameTail } from "#helpers"; // yes
 import { typeNameTail } from "../helpers/ast.ts"; // no: import/no-relative-parent-imports
 ```
 

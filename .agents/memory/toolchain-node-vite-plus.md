@@ -13,7 +13,7 @@ description: Node.js 22+ with Vite+ (vp) and npm; only package.json, tsconfig.js
 - **Toolchain:** Vite+ (`vite-plus` devDependency, command `vp`): Vite,
   Vitest, Oxlint, Oxfmt, type checking, tsdown.
 - **Package manager:** npm everywhere. `package-lock.json` is committed in
-  apps *and* libraries (user agreed 2026-10-14: `npm ci` needs it). There is no
+  apps _and_ libraries (user agreed 2026-10-14: `npm ci` needs it). There is no
   `packageManager` field; Vite+ detects npm from the lockfile.
 
 ## Config files
@@ -27,15 +27,15 @@ The target is a short `vite.config.ts`, around 30 lines (not strict).
 
 ## Commands
 
-| Command              | Does                                                        |
-| -------------------- | ----------------------------------------------------------- |
-| `vp check`           | format check, Oxlint (type-aware), and type check together  |
-| `vp check --fix`     | the same, applying formatting and safe fixes                |
-| `vp test`            | Vitest; `vp test tests` runs only the top-level `tests/`    |
-| `vp build`           | Vite production build (apps)                                |
-| `vp dev`             | Vite dev server (apps)                                      |
-| `vp pack`            | tsdown library build into `dist/` (packages)                |
-| `npm ci` / `npm install` | install; never another package manager                  |
+| Command                  | Does                                                       |
+| ------------------------ | ---------------------------------------------------------- |
+| `vp check`               | format check, Oxlint (type-aware), and type check together |
+| `vp check --fix`         | the same, applying formatting and safe fixes               |
+| `vp test`                | Vitest; `vp test tests` runs only the top-level `tests/`   |
+| `vp build`               | Vite production build (apps)                               |
+| `vp dev`                 | Vite dev server (apps)                                     |
+| `vp pack`                | tsdown library build into `dist/` (packages)               |
+| `npm ci` / `npm install` | install; never another package manager                     |
 
 `vp check`, `vp test`, and the build (`vp build` or `vp pack`) must all pass
 before any push. CI installs the toolchain with `voidzero-dev/setup-vp`.

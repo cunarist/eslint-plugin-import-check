@@ -19,12 +19,12 @@ Metadata first, then `scripts`, `exports`, `imports`, `devDependencies`,
   "type": "module",
   "files": ["dist"],
   "engines": { "node": ">=22" },
-  "eslint-doc-generator": { /* tool options that can only live here */ },
+  "eslint-doc-generator": {/* tool options that can only live here */},
   "scripts": { "docs": "eslint-doc-generator" },
   "exports": { ".": "./dist/index.js" },
   "imports": { "#helpers": "./src/helpers/index.ts" },
   "devDependencies": { "vite-plus": "^1.1.0" },
-  "dependencies": {}
+  "dependencies": {},
 }
 ```
 
