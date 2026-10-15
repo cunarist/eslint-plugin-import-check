@@ -9,6 +9,7 @@
 
 import tsParser from "@typescript-eslint/parser";
 import { RuleTester as EslintRuleTester } from "eslint";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { RuleTester as OxlintRuleTester } from "vite-plus/lint/plugins-dev";
 import { describe, it } from "vite-plus/test";
@@ -25,9 +26,11 @@ OxlintRuleTester.it = it;
 
 /**
  * The filename a snippet is linted as unless its case names one, so both
- * parsers read TypeScript.
+ * parsers read TypeScript. Absolute, because ESLint passes a relative name
+ * through unchanged while Oxlint resolves it elsewhere; this way both hosts
+ * see the same path, under this repository's own `package.json`.
  */
-const FILENAME = "example.ts";
+const FILENAME: string = resolve("example.ts");
 
 /**
  * The fixture project: a `package.json` whose `imports` the rules read from

@@ -42,6 +42,8 @@ Checked empirically against Oxlint 1.87 (Vite+ 1.1.0), ESLint 9.39, and
   `.source` under both hosts (typescript-eslint 8 deprecates `.argument`). A
   backtick dynamic import is `ImportExpression` with a `TemplateLiteral`
   source under both.
-- `context.filename` is the absolute path under both hosts, and both
-  `RuleTester`s take a per-case absolute `filename`.
+- Both `RuleTester`s take a per-case absolute `filename`, and
+  `context.filename` is then that path under both hosts. A relative name is
+  not: ESLint passes it through unchanged, Oxlint joins it onto
+  `node_modules/oxlint/`. So `#testing`'s default is `resolve("example.ts")`.
 - Vite+ bundles `vite.config.ts` and resolves `#` imports in it.
