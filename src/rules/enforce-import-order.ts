@@ -185,7 +185,11 @@ function fixImportBlock(
   const start = first.node.range[0];
   const end = last.node.range[1];
   const contiguous = body.indexOf(last.node) - body.indexOf(first.node) + 1 === entries.length;
-  if (!contiguous || hasCommentWithin(source, start, end)) {
+  // A comment trailing the last import on its line would stay put and end up
+  // beside whichever import is moved there.
+  const lineEnd = source.text.indexOf("\n", end);
+  const commentEnd = lineEnd === -1 ? source.text.length : lineEnd;
+  if (!contiguous || hasCommentWithin(source, start, commentEnd)) {
     return null;
   }
   const ordered = fixedOrder(entries);

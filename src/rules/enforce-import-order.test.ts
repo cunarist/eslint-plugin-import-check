@@ -63,6 +63,12 @@ testRule("enforce-import-order", enforceImportOrderRule, {
       errors: [{ messageId: "extraBlankLine" }],
     },
 
+    // reports without a fix when a comment trails the last import
+    {
+      code: 'import { b } from "./helper.ts";\nimport { a } from "zod"; // Why zod.\n',
+      errors: [{ messageId: "groupOrder", data: { group: PACKAGE, previous: RELATIVE } }],
+    },
+
     // reports without a fix when another statement sits between imports
     {
       code: 'import { b } from "#components";\nconst x = 1;\nimport { a } from "#app-store";\nexport { a, b, x };\n',
