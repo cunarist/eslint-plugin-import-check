@@ -26,8 +26,9 @@ and follow it before reasoning or responding.
 - The only config files are `package.json`, `tsconfig.json`, and
   `vite.config.ts`, plus `package-lock.json`. Only `.ts` source files, configs
   included; there are no `.js`, `.mjs`, `.cjs`, `.jsx`, or `.tsx` files. The
-  one other JSON file is the rule-test fixture,
-  `src/testing/fixture/package.json`.
+  only other JSON files are the rule-test fixtures under
+  `src/testing/fixture/`: its `package.json` and a nested one that proves the
+  config lookup stops at the nearest `package.json`, as Node.js does.
 - Every directory's entry file is `index.ts`. Every rule lives flat in
   `src/rules/<rule-id>.ts`, tested in `src/rules/<rule-id>.test.ts` and
   registered in `src/rules/index.ts`.

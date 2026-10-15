@@ -18,11 +18,13 @@ description: package.json imports replace deno.json imports; key order is the la
 - Only string targets starting with `./` or `../` are read. Package targets
   (`"#lit": "lit"`) and condition objects are ignored, as Deno ignored
   `jsr:`/`npm:` targets.
-- Discovery is 1:1 with Deno: walk up from the file and use the first
-  `package.json` that has a local `#` entry. Node.js itself stops at the
-  nearest `package.json`; whether to stop there too is an open question.
+- Discovery follows Node.js, not Deno: walk up from the file and stop at the
+  nearest `package.json`, even when it has no local `#` entry, so a nested
+  package never borrows an enclosing one's imports (decided 2026-10-16;
+  Deno kept walking to the first file with a `#` entry). A fixture under
+  `src/testing/fixture/src/utils/vendored/` tests it.
 - `deno.jsonc` and JSONC are gone: `package.json` is strict JSON. An
-  unparsable file is skipped, as Deno skipped one.
+  unparsable nearest file gives no config; the search does not go past it.
 - Parsed configs are cached per file path and reused only while its `mtimeMs`
   is unchanged, so an editor's long-lived lint process sees edits. Deno cached
   per directory for the whole run.

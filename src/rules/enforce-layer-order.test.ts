@@ -43,6 +43,9 @@ testRule("enforce-layer-order", enforceLayerOrderRule, {
 
     // never fires for a "#" specifier the nearest package.json lacks
     upwardCode,
+
+    // stops at the nearest package.json, like Node.js, even without imports
+    { code: upwardCode, filename: fixture("src/utils/vendored/index.ts") },
   ],
   invalid: [
     // rejects importing a module declared above

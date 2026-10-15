@@ -101,16 +101,19 @@ function modifiedAt(path: string): number | null {
 }
 
 /**
- * Walks up from a file to find the nearest `package.json` and reads its
- * `#`-prefixed imports. Returns `null` when no config exists, or when none
- * up the tree can be read or declares a local `#` entry.
+ * Walks up from a file to the nearest `package.json` and reads its
+ * `#`-prefixed imports. Like Node.js, the search stops at that file even when
+ * it declares no `#` entries, so a nested package never borrows the imports
+ * of an enclosing one. Returns `null` when no `package.json` exists up the
+ * tree, or when the nearest one cannot be read or declares no local `#` entry.
  */
 export function findImportsConfig(fromFile: string): ImportsConfig | null {
   let dir = parentDir(normalizePath(fromFile));
   for (;;) {
-    const config = cachedConfig(`${dir}/${CONFIG_NAME}`, dir);
-    if (config !== null) {
-      return config;
+    const configPath = `${dir}/${CONFIG_NAME}`;
+    const mtimeMs = modifiedAt(configPath);
+    if (mtimeMs !== null) {
+      return cachedConfig(configPath, dir, mtimeMs);
     }
     const parent = parentDir(dir);
     if (parent === dir) {
@@ -120,12 +123,12 @@ export function findImportsConfig(fromFile: string): ImportsConfig | null {
   }
 }
 
-/** One candidate config, read through the cache. */
-function cachedConfig(configPath: string, configDir: string): ImportsConfig | null {
-  const mtimeMs = modifiedAt(configPath);
-  if (mtimeMs === null) {
-    return null;
-  }
+/** One config file, read through the cache. */
+function cachedConfig(
+  configPath: string,
+  configDir: string,
+  mtimeMs: number,
+): ImportsConfig | null {
   const cached = configCache.get(configPath);
   if (cached?.mtimeMs === mtimeMs) {
     return cached.config;
@@ -145,7 +148,7 @@ function importsField(parsed: unknown): object | null {
 }
 
 /**
- * Reads and parses one candidate config file. Returns `null` when the file
+ * Reads and parses one config file. Returns `null` when the file
  * is unreadable, is not JSON, or has no local `#` entries.
  */
 function readConfig(configPath: string, configDir: string): ImportsConfig | null {
