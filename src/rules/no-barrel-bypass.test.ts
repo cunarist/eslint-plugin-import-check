@@ -17,6 +17,9 @@ testRule("no-barrel-bypass", noBarrelBypassRule, {
       filename: APP_STORE,
     },
 
+    // leaves a pattern linking files outside every module alone
+    { code: 'import { other } from "#/other.ts";\n', filename: fixture("scripts/build.ts") },
+
     // never fires for a "#" specifier the nearest package.json lacks
     'import { internal } from "#components/internal.ts";\n',
   ],
@@ -47,6 +50,25 @@ testRule("no-barrel-bypass", noBarrelBypassRule, {
       filename: APP_STORE,
       errors: [
         { messageId: "internals", data: { specifier: "#/utils/index.ts" }, suggestions: [] },
+      ],
+    },
+
+    // still checks a file outside the modules reaching into one
+    {
+      code: bypassCode,
+      filename: fixture("vite.config.ts"),
+      errors: [
+        {
+          messageId: "bypass",
+          data: { specifier: "#components/internal.ts", owner: "#components" },
+          suggestions: [
+            {
+              messageId: "useEntry",
+              data: { owner: "#components" },
+              output: 'import { internal } from "#components";\n',
+            },
+          ],
+        },
       ],
     },
   ],

@@ -4,6 +4,9 @@ import {
   baseName,
   docsUrl,
   type ExplicitRule,
+  findImportsConfig,
+  isInModuleScope,
+  isModulePath,
   normalizePath,
   REJECTED_STEMS,
   stemName,
@@ -17,7 +20,9 @@ import {
  *
  * The rule keeps the name of the Deno plugin's rule, which required `mod.ts`;
  * on Node.js the entry point is `index.ts`. One name everywhere means a
- * module's entry point is never ambiguous.
+ * module's entry point is never ambiguous. Only the folders `#` entries own
+ * are modules, so a file outside them, and an import between such files, is
+ * left alone.
  */
 export const enforceModFileRule: ExplicitRule = {
   meta: {
@@ -39,7 +44,10 @@ export const enforceModFileRule: ExplicitRule = {
       if (!specifier.startsWith(".") && !specifier.startsWith("#")) {
         return;
       }
-      if (REJECTED_STEMS.includes(stemName(specifier))) {
+      if (
+        REJECTED_STEMS.includes(stemName(specifier)) &&
+        isInModuleScope(context.filename, specifier)
+      ) {
         context.report({ node, messageId: "specifier", data: { specifier } });
       }
     });
@@ -47,7 +55,12 @@ export const enforceModFileRule: ExplicitRule = {
       ...specifiers,
       Program(node: TSESTree.Program): void {
         const filename = normalizePath(context.filename);
-        if (REJECTED_STEMS.includes(stemName(filename))) {
+        const config = findImportsConfig(filename);
+        if (
+          REJECTED_STEMS.includes(stemName(filename)) &&
+          config !== null &&
+          isModulePath(config, filename)
+        ) {
           context.report({ node, messageId: "fileName", data: { name: baseName(filename) } });
         }
       },

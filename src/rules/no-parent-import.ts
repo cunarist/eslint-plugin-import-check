@@ -4,6 +4,7 @@ import {
   docsUrl,
   type ExplicitRule,
   findImportsConfig,
+  isInModuleScope,
   normalizePath,
   parentDir,
   quoteLike,
@@ -16,7 +17,8 @@ import {
  * entry where `package.json` declares an entry for the same file.
  *
  * Reaching up and back down couples two modules through their file layout
- * instead of their public surface.
+ * instead of their public surface. Files outside every `#` module, such as
+ * `tests/` reaching `../scripts/build.ts`, may import each other by path.
  */
 export const noParentImportRule: ExplicitRule = {
   meta: {
@@ -34,7 +36,7 @@ export const noParentImportRule: ExplicitRule = {
   },
   create(context) {
     return visitSpecifiers((node, specifier) => {
-      if (!specifier.startsWith("../")) {
+      if (!specifier.startsWith("../") || !isInModuleScope(context.filename, specifier)) {
         return;
       }
       const config = findImportsConfig(context.filename);

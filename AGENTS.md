@@ -48,14 +48,16 @@ and follow it before reasoning or responding.
   repo's own `enforce-layer-order` checks: `#plugin`, `#rules`, `#testing`,
   `#helpers`. Code outside `src/` uses relative paths: `vite.config.ts`
   imports the plugin through `#plugin` (`prefer-alias-import` requires it)
-  and `./scripts/project-lint.ts` by relative path. Source imports only `.ts` files, never JSON; rules read
+  and `./scripts/project-lint.ts` by relative path, which the folder-layout
+  rules allow because neither file lies in a `#` module. Source imports only `.ts` files, never JSON; rules read
   `package.json` with `node:fs`.
 - `meta.name` and `meta.version` are written out in `src/plugin/index.ts`; a release
   bumps them with `package.json`, and `tests/package-meta.test.ts` checks both.
 - Rules use ESLint's standard `create` API, typed `ExplicitRule`, with every
   visitor's node parameter annotated. Messages are one ESLint-style sentence.
 - Unit tests sit next to the code as `*.test.ts`. Regression and integration
-  tests go in `tests/` and use only the plugin, through `#plugin`.
+  tests go in `tests/` and use only the plugin, through `#plugin`, plus the
+  `#testing` harness to run its rules under both hosts.
 - Every rule test runs under both ESLint's and Oxlint's `RuleTester` through
   `testRule`, called exactly once per rule file with every case in its `valid`
   and `invalid` lists. Write cases once, in ESLint's shape and 1-based columns.

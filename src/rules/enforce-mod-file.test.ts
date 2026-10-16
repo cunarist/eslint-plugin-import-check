@@ -16,6 +16,10 @@ testRule("enforce-mod-file", enforceModFileRule, {
       code: 'import { a } from "./components/index.ts";\nimport { b } from "some-pkg/mod.ts";\n',
       filename: SRC,
     },
+
+    // leaves files outside every "#" module, and imports between them, alone
+    { code: "export const thing = 1;\n", filename: fixture("scripts/mod.ts") },
+    { code: 'import { a } from "./scripts/mod.ts";\n', filename: fixture("vite.config.ts") },
   ],
   invalid: [
     // rejects a file named mod.ts
@@ -27,12 +31,12 @@ testRule("enforce-mod-file", enforceModFileRule, {
 
     // catches mod files of any extension
     {
-      code: 'import { a } from "./components/mod.jsx";\nimport { b } from "./components/mod.mts";\n',
-      filename: fixture("src/mod.js"),
+      code: 'import { a } from "../components/mod.jsx";\nimport { b } from "../components/mod.mts";\n',
+      filename: fixture("src/types/mod.js"),
       errors: [
         { messageId: "fileName", data: { name: "mod.js" } },
-        specifier("./components/mod.jsx"),
-        specifier("./components/mod.mts"),
+        specifier("../components/mod.jsx"),
+        specifier("../components/mod.mts"),
       ],
     },
 
@@ -41,6 +45,13 @@ testRule("enforce-mod-file", enforceModFileRule, {
       code: 'import { a } from "./components/mod.ts";\nimport { b } from "#components/mod.ts";\n',
       filename: SRC,
       errors: [specifier("./components/mod.ts"), specifier("#components/mod.ts")],
+    },
+
+    // still checks a file outside the modules reaching into one
+    {
+      code: 'import { a } from "./src/components/mod.ts";\n',
+      filename: fixture("vite.config.ts"),
+      errors: [specifier("./src/components/mod.ts")],
     },
   ],
 });

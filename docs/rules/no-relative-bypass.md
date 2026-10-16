@@ -21,6 +21,10 @@ reach another module: a sibling file, or a `#` entry.
 - Anything else in a subfolder, or anything two or more levels down, fires.
   Import the folder's `index.ts` and re-export what you need from there.
 - `../`, `#`, and package specifiers are left to other rules.
+- Only imports from or into a folder a `#` entry owns are checked (see
+  [Modules](../../README.md#modules)). Files outside every module import each
+  other directly, so `vite.config.ts` may import `./scripts/build.ts`, and no
+  `index.ts` is demanded of a folder no `#` entry owns.
 
 Examples of **incorrect** code for this rule:
 

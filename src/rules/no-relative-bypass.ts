@@ -1,11 +1,20 @@
-import { BARREL_STEMS, docsUrl, type ExplicitRule, stemName, visitSpecifiers } from "#helpers";
+import {
+  BARREL_STEMS,
+  docsUrl,
+  type ExplicitRule,
+  isInModuleScope,
+  stemName,
+  visitSpecifiers,
+} from "#helpers";
 
 /**
  * `no-relative-bypass` — rejects a `./` specifier that descends more than one
  * level, or lands anywhere in a subfolder but its entry point.
  *
  * Together with `no-parent-import` this leaves exactly two ways to reach
- * another module: a sibling file, or a `#` entry.
+ * another module: a sibling file, or a `#` entry. Imports between files
+ * outside every `#` module, such as `./scripts/build.ts` from
+ * `vite.config.ts`, are left alone.
  */
 export const noRelativeBypassRule: ExplicitRule = {
   meta: {
@@ -36,6 +45,9 @@ export const noRelativeBypassRule: ExplicitRule = {
         return;
       }
       if (segments.length === 2 && BARREL_STEMS.includes(stemName(file))) {
+        return;
+      }
+      if (!isInModuleScope(context.filename, specifier)) {
         return;
       }
       context.report({ node, messageId: "bypass", data: { specifier, folder } });

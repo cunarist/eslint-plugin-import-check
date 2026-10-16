@@ -7,6 +7,7 @@
  * tester is configured here.
  */
 
+import type { RuleDefinition } from "@eslint/core";
 import tsParser from "@typescript-eslint/parser";
 import { RuleTester as EslintRuleTester } from "eslint";
 import { resolve } from "node:path";
@@ -15,6 +16,12 @@ import { RuleTester as OxlintRuleTester } from "vite-plus/lint/plugins-dev";
 import { describe, it } from "vite-plus/test";
 
 import type { ExplicitRule } from "#helpers";
+
+/**
+ * A rule under test: one from `src/rules/`, or one read back off the
+ * published plugin, which types its rules as ESLint's plain `RuleDefinition`.
+ */
+export type TestedRule = ExplicitRule | RuleDefinition;
 
 EslintRuleTester.describe = describe;
 EslintRuleTester.it = it;
@@ -138,7 +145,7 @@ function position(code: string, offset: number): Position {
  * `<rule> > eslint|oxlint`, so a full test name contains ` eslint ` or
  * ` oxlint `, which is what CI filters each host's step by.
  */
-export function testRule(name: string, rule: ExplicitRule, cases: RuleCases): void {
+export function testRule(name: string, rule: TestedRule, cases: RuleCases): void {
   describe(name, () => {
     describe("eslint", () => {
       eslintTester.run(name, rule, {

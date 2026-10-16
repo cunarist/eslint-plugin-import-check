@@ -329,3 +329,36 @@ export function resolveTarget(
   const resolved = resolveFrom(parentDir(normalizePath(filename)), specifier);
   return config.byTarget.get(resolved) ?? null;
 }
+
+/**
+ * Whether a path lies in a module some `#` entry owns: the entry's own file,
+ * or anything in a barrel entry's folder, the folder itself included.
+ */
+export function isModulePath(config: ImportsConfig, path: string): boolean {
+  const normalized = normalizePath(path);
+  return config.entries.some(
+    (entry) =>
+      entry.target === normalized ||
+      (entry.isBarrel && (entry.dir === normalized || isInsideDir(normalized, entry.dir))),
+  );
+}
+
+/**
+ * Whether the folder-layout rules check a specifier at all. They guard the
+ * folders `#` entries own, so an import is in scope when the importing file
+ * or the file it names lies in such a module. Imports between files outside
+ * every module, such as `vite.config.ts` reaching `./scripts/build.ts`, are
+ * plain file imports and stay unchecked; so is everything in a project whose
+ * `package.json` declares no `#` entry.
+ */
+export function isInModuleScope(filename: string, specifier: string): boolean {
+  const config = findImportsConfig(filename);
+  if (config === null) {
+    return false;
+  }
+  if (isModulePath(config, filename)) {
+    return true;
+  }
+  const target = resolveLocalSpecifier(filename, specifier);
+  return target !== null && isModulePath(config, target);
+}

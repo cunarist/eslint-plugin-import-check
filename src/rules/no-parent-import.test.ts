@@ -19,6 +19,16 @@ testRule("no-parent-import", noParentImportRule, {
       code: 'import { internal } from "./internal.ts";\nimport { utils } from "#utils";\nimport { html } from "#lit";\n',
       filename: COMPONENTS,
     },
+
+    // lets files outside every "#" module import each other by path
+    {
+      code: 'import { build } from "../scripts/build.ts";\n',
+      filename: fixture("tests/a.test.ts"),
+    },
+    {
+      code: 'import { config } from "../vite.config.ts";\n',
+      filename: fixture("scripts/build.ts"),
+    },
   ],
   invalid: [
     // replaces a parent import with its "#" entry
@@ -64,7 +74,18 @@ testRule("no-parent-import", noParentImportRule, {
     // reports without a fix when no "#" entry points at the target
     {
       code: 'import { thing } from "../thing.ts";\n',
+      filename: COMPONENTS,
       errors: [{ messageId: "parentImport", data: { specifier: "../thing.ts" } }],
+    },
+
+    // still checks a file outside the modules reaching into one
+    {
+      code: 'import { utils } from "../src/utils/index.ts";\n',
+      filename: fixture("tests/a.test.ts"),
+      output: 'import { utils } from "#utils";\n',
+      errors: [
+        { messageId: "useAlias", data: { specifier: "../src/utils/index.ts", alias: "#utils" } },
+      ],
     },
   ],
 });

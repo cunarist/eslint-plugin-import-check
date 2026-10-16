@@ -28,6 +28,14 @@ export default [ts, plugin.configs["import-check"]];
 
 The order of the `#` entries in `package.json` is the layer order, top first; a module may only import modules declared below it.
 
+### Modules
+
+A module is a folder that a `#` entry in `package.json` `imports` owns, such as `src/utils/` for `"#utils": "./src/utils/index.ts"`; an entry pointing at any file but an `index` file owns only that file.
+The folder-layout rules (`enforce-layer-order`, `enforce-mod-file`, `no-barrel-bypass`, `no-parent-import`, `no-relative-bypass`, `prefer-alias-import`) check only imports from or into a module.
+Files outside every module, such as `vite.config.ts`, `scripts/*.ts` and `tests/*.ts`, import each other directly by relative path, and no rule demands an `index.ts` for a folder no `#` entry owns.
+Importing a module from outside still goes through its `#` entry.
+The other rules (import order, duplicate sources, wildcards, absolute paths, self-imports) are not about folders and apply to every file.
+
 <!-- prettier-ignore-start -->
 <!-- begin auto-generated rules list -->
 

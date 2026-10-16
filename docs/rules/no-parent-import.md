@@ -21,6 +21,10 @@ and nothing marks the target as something meant to be imported.
   keeping the quote style. A backtick specifier becomes a double-quoted one.
 - With no such entry the rule reports without a fix. Add an entry, or move the
   shared code into a module that already has one.
+- Only imports from or into a folder a `#` entry owns are checked (see
+  [Modules](../../README.md#modules)). Files outside every module, such as
+  `tests/a.test.ts` importing `../scripts/build.ts`, may reach each other by
+  path.
 
 Examples of **incorrect** code for this rule:
 

@@ -5,6 +5,7 @@ import {
   type ExplicitRule,
   findImportsConfig,
   findPatternEntry,
+  isInModuleScope,
   patternOwner,
   quoteLike,
   visitSpecifiers,
@@ -16,7 +17,8 @@ import {
  * `"#components/*"`.
  *
  * Whatever a file needs should be re-exported from the module's entry point,
- * so the module keeps one public surface. Switching to that entry point is a
+ * so the module keeps one public surface. A pattern that only links files
+ * outside every `#` module is left alone. Switching to that entry point is a
  * suggestion, since the entry point may not export the name yet.
  */
 export const noBarrelBypassRule: ExplicitRule = {
@@ -44,7 +46,7 @@ export const noBarrelBypassRule: ExplicitRule = {
         return;
       }
       const pattern = findPatternEntry(config, specifier);
-      if (pattern === null) {
+      if (pattern === null || !isInModuleScope(context.filename, specifier)) {
         return;
       }
       const owner = patternOwner(config, pattern);

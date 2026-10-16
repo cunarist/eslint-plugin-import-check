@@ -25,6 +25,16 @@ testRule("no-relative-bypass", noRelativeBypassRule, {
       code: 'import { utils } from "../utils/deep/thing.ts";\nimport { html } from "lit/directives/class-map.js";\n',
       filename: SRC,
     },
+
+    // lets files outside every "#" module import each other by path
+    {
+      code: 'import { decorators } from "./scripts/decorators.ts";\n',
+      filename: fixture("vite.config.ts"),
+    },
+    {
+      code: 'import { deep } from "./sub/deep/thing.ts";\n',
+      filename: fixture("scripts/build.ts"),
+    },
   ],
   invalid: [
     // rejects reaching past a subfolder entry point
@@ -55,6 +65,15 @@ testRule("no-relative-bypass", noRelativeBypassRule, {
       filename: fixture("index.ts"),
       errors: [
         { messageId: "bypass", data: { specifier: "./src/components/index.ts", folder: "src" } },
+      ],
+    },
+
+    // checks a module file even when the target lies outside every module
+    {
+      code: 'import { thing } from "./unmapped/thing.ts";\n',
+      filename: fixture("src/utils/index.ts"),
+      errors: [
+        { messageId: "bypass", data: { specifier: "./unmapped/thing.ts", folder: "unmapped" } },
       ],
     },
   ],

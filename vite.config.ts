@@ -15,12 +15,7 @@ export default defineConfig({
     categories: { correctness: "error", suspicious: "error", pedantic: "error", perf: "error" },
     rules: { ...importCheck.configs.all.rules, ...projectLint.configs.project.rules },
     // File globs are config, not a rule list: the registry imports every rule.
-    overrides: [
-      { files: ["src/rules/index.ts"], rules: { "import/max-dependencies": "off" } },
-      // Aliases name only src/ subfolders, so this config reaches scripts/ by
-      // relative path.
-      { files: ["vite.config.ts"], rules: { "@cunarist/import-check/no-relative-bypass": "off" } },
-    ],
+    overrides: [{ files: ["src/rules/index.ts"], rules: { "import/max-dependencies": "off" } }],
     options: {
       typeAware: true,
       typeCheck: true,

@@ -27,7 +27,8 @@ detectable, and the `imports` map doubles as documentation of the layers.
   folder; an entry that points at any other file, `mod.ts` included, owns
   only that file.
   A file belongs to the most specific entry that owns it, and files no entry
-  owns, such as scripts, are never checked.
+  owns, such as scripts, are never checked (see
+  [Modules](../../README.md#modules)).
 - A target is resolved whether it is written as an exact alias, a subpath
   pattern such as `#components/x.ts`, or a relative path to an entry's file.
 - A file importing its own module's entry point fires too, since that is a

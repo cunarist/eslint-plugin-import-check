@@ -24,6 +24,9 @@ module keeps exactly one public surface.
 - A catch-all pattern such as `"#/*": "./src/*"` makes every file reachable
   past its entry point, so it fires too, with no entry point to suggest.
 - If you declare no subpath patterns at all, this rule never fires.
+- Only imports from or into a folder a `#` entry owns are checked (see
+  [Modules](../../README.md#modules)), so a pattern that links two files
+  outside every module is left alone.
 
 Examples of **incorrect** code for this rule:
 
