@@ -18,8 +18,8 @@ import {
  * the Node.js convention. Reports both a file named `mod` and any project
  * specifier pointing at one.
  *
- * The rule keeps the name of the Deno plugin's rule, which required `mod.ts`;
- * on Node.js the entry point is `index.ts`. One name everywhere means a
+ * The rule keeps its original name from when it required `mod.ts`; on
+ * Node.js the entry point is `index.ts`. One name everywhere means a
  * module's entry point is never ambiguous. Only the folders `#` entries own
  * are modules, so a file outside them, and an import between such files, is
  * left alone.

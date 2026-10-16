@@ -62,11 +62,10 @@ and follow it before reasoning or responding.
   `testRule`, called exactly once per rule file with every case in its `valid`
   and `invalid` lists. Write cases once, in ESLint's shape and 1-based columns.
 - Rules this repo enforces on itself but does not publish live in
-  `scripts/project-lint.ts`, so far an unchanged copy from
-  cunarist/eslint-plugin-explicit-types (header included, which is why it
-  names that plugin). Rules needed for this repo's Deno lint parity get added
-  there. `scripts/` is repo tooling, never packed or published, and has no
-  tests.
+  `scripts/project-lint.ts`, so far a copy from
+  cunarist/eslint-plugin-explicit-types. Rules this repo needs only for its
+  own lint get added there. `scripts/` is repo tooling, never packed or
+  published, and has no tests.
 - The repo lints itself with its own rules. Lint disable and enable comments
   (`eslint-*` or `oxlint-*`, any form) fail `vp check`; fix the source.
 - `vite.config.ts` lists no rule by name: its `rules` spreads

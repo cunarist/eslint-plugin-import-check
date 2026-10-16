@@ -11,7 +11,7 @@ import { isInsideDir, normalizePath, parentDir, resolveFrom, stemName } from "./
 /**
  * File name stems that mark a directory's public entry point. Compared
  * without the extension so `.ts`, `.tsx`, `.js` and friends all count. Only
- * `index` qualifies; a Deno-style `mod` file is a plain module.
+ * `index` qualifies; a `mod` file is a plain module.
  */
 export const BARREL_STEMS: string[] = ["index"];
 

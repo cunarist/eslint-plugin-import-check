@@ -4,9 +4,9 @@
  * `package.json` `imports` field as the layer order.
  *
  * One plugin, namespace `@cunarist/import-check`, so a rule id reads
- * `@cunarist/import-check/enforce-layer-order`. The Deno plugin was a single
- * plugin, `import-check`, which survives as the `import-check` config, plus
- * `all`, which turns on every rule. The plugin is the only export; its configs
+ * `@cunarist/import-check/enforce-layer-order`. Its configs are
+ * `import-check`, the rules it was ported with, and `all`, which turns on
+ * every rule. The plugin is the only export; its configs
  * are at `plugin.configs`.
  *
  * This file is the package entry: `vp pack` builds it as `dist/index.js`.
@@ -22,8 +22,7 @@ import { rules } from "#rules";
 const NAMESPACE = "@cunarist/import-check";
 
 /**
- * The `import-check` preset — every rule of the Deno plugin
- * `jsr:@cunarist/deno-import-check/lint`.
+ * The `import-check` preset — every rule the plugin was ported with.
  *
  * Bans the import patterns that create cycles, keeps every module behind one
  * entry point, layers modules by their `package.json` `imports` order, and
@@ -43,7 +42,7 @@ const IMPORT_CHECK: string[] = [
   "enforce-layer-order",
 ];
 
-/** The flat configs at `plugin.configs`, one per Deno plugin plus `all`. */
+/** The flat configs at `plugin.configs`: `import-check` and `all`. */
 interface ImportCheckConfigs {
   "import-check": ConfigObject;
   all: ConfigObject;
@@ -83,7 +82,7 @@ function presetConfig(preset: string, ruleIds: string[]): ConfigObject {
 
 /**
  * The plugin, for ESLint `plugins` or Oxlint `jsPlugins`, and the package's
- * only export. Configs: `import-check` holds the Deno plugin's rules, and
+ * only export. Configs: `import-check` holds the ported rules, and
  * `all` turns on every rule, so a new rule joins it by itself.
  */
 const plugin: ImportCheckPlugin = Object.assign(basePlugin, {

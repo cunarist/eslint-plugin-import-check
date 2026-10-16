@@ -5,10 +5,10 @@ import plugin from "#plugin";
 const NAMESPACE = "@cunarist/import-check";
 
 /**
- * The rules of the Deno plugin this one ports, and nothing else. A repo-only
+ * The rules this plugin was ported with, and nothing else. A repo-only
  * rule goes in `scripts/project-lint.ts`, never in the published plugin.
  */
-const DENO_RULES: string[] = [
+const PORTED_RULES: string[] = [
   "enforce-import-order",
   "enforce-layer-order",
   "enforce-mod-file",
@@ -23,8 +23,8 @@ const DENO_RULES: string[] = [
 ];
 
 describe("plugin.rules", () => {
-  it("holds exactly the 11 rules of the Deno plugin", () => {
-    expect(Object.keys(plugin.rules ?? {}).toSorted()).toEqual(DENO_RULES);
+  it("holds exactly the 11 ported rules", () => {
+    expect(Object.keys(plugin.rules ?? {}).toSorted()).toEqual(PORTED_RULES);
   });
 });
 
@@ -35,7 +35,7 @@ describe("plugin.configs.all", () => {
     expect(Object.keys(plugin.configs.all.rules ?? {}).toSorted()).toEqual(ruleIds.toSorted());
   });
 
-  it("equals the import-check config, the only Deno plugin", () => {
+  it("equals the import-check config, the only ported rule set", () => {
     expect(plugin.configs.all.rules).toEqual(plugin.configs["import-check"].rules);
   });
 });
