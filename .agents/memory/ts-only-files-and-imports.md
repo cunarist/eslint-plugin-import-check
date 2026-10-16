@@ -1,5 +1,5 @@
 ---
-description: Every file is .ts (no js/mjs/cjs/jsx/tsx, configs included) and source imports only .ts; CSS comes from HTML, JSON/SVG become .ts modules
+description: Every file is .ts (no js/mjs/cjs/jsx/tsx, configs included); imports name .ts files or .js package subpaths, never assets; CSS comes from HTML, JSON/SVG become .ts modules
 ---
 
 The user's rule, from the Deno days and restated for Node (2026-10-12): "No
@@ -12,17 +12,21 @@ plain `.ts`. Build output in a gitignored folder is the only JS.
 `noUncheckedIndexedAccess`). If a tool or framework seems to need a JS or TSX
 file, stop and flag it instead of adding one.
 
-## Only `.ts` imports (2026-10-14)
+## No asset imports (2026-10-14, widened 2026-10-16)
 
-`project/no-non-ts-imports` (in `scripts/project-lint.ts`) fails:
+`project/no-asset-imports` (in `scripts/project-lint-modules.ts`; it was
+`no-non-ts-imports` before 2026-10-16) fails:
 
 - a relative, absolute, `#`, or package-subpath specifier whose last segment
-  has a non-`.ts` extension: `.css`, `.json`, `.svg`, `.js`, `.mjs`, `.tsx`;
+  has an extension other than `.ts` or `.js`: `.css`, `.json`, `.svg`,
+  `.mjs`, `.tsx`;
 - any `?query` suffix (`?raw`, `?url`, `?inline`);
 - any import attributes (`with { type: "json" }`, `with { type: "text" }`).
 
-Bare packages (`lit`, `@types/json-schema`, `lodash.debounce`), `#` aliases,
-and `node:` builtins pass. `@fortawesome/x/svgs/a.svg` fails.
+`.js` is allowed for package subpaths such as `lit/decorators.js`; our own
+files are still `.ts` only. Bare packages (`lit`, `@types/json-schema`,
+`lodash.debounce`), `#` aliases, and `node:` builtins pass.
+`@fortawesome/x/svgs/a.svg` fails.
 
 ```ts
 import "./theme.css"; // no
@@ -44,5 +48,5 @@ import { scenes } from "#data/scenes"; // yes: scenes.ts
   and fails on drift (the plugin repos do this for `meta.name`/`meta.version`).
 - **Reading a file is not importing it.** `readFileSync` + `JSON.parse` is
   fine in tooling and tests.
-- **A tool's `.js` entry:** don't `import("pkg/cli.js")`; use the package
-  entry or spawn the package's bin ([[lit-analyzer-ts6]]).
+- **A tool's `.js` entry:** `import("pkg/cli.js")` passes the rule now, but
+  prefer the package entry or spawning its bin ([[lit-analyzer-ts6]]).

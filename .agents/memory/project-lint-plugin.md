@@ -1,5 +1,5 @@
 ---
-description: scripts/project-lint.ts is the repo-local plugin "project" holding the repo's rule list (typed DummyRuleMap) and repo-only rules; never published, no tests
+description: scripts/project-lint.ts is the repo-local plugin "project" holding the repo's rule list (typed DummyRuleMap); its rules sit in flat scripts/project-lint-*.ts files; never published, no tests
 ---
 
 Every repo has `scripts/project-lint.ts`, copied from
@@ -11,11 +11,16 @@ Oxlint plugin with `meta.name` `"project"`, loaded through `jsPlugins` in
   plugin configs: Deno parity rules, extras, per-rule options, and opt-outs,
   built-in Oxlint ids included (`curly`, `id-match`, `import/no-cycle`, ...).
 - **Custom rules**, enabled as `project/<rule>`. Every repo has
-  `no-disable-comments` and `no-non-ts-imports`. Apps also port the rules of
+  `no-disable-comments` and `no-asset-imports`. Apps also port the rules of
   their old `scripts/deno-lint-plugin.ts` here under the same names and
   behavior (`no-self-sync`, `app-module-conventions`, `restricted-types`, ...).
 
-Rules and plugin stay in this one file; don't add `scripts/rules/`.
+`scripts/` is flat: no subfolders and no `index.ts`. `max-lines` (300)
+applies, so rules live in themed sibling files sharing the prefix and
+`scripts/project-lint.ts` imports them by relative path. In import-check:
+`project-lint.ts` (plugin and rule list), `project-lint-comments.ts`
+(`no-disable-comments`), `project-lint-modules.ts` (`no-asset-imports`), and
+`project-lint-types.ts` (shared rule types). Don't add `scripts/rules/`.
 
 ```ts
 import type { DummyRuleMap } from "vite-plus/lint";

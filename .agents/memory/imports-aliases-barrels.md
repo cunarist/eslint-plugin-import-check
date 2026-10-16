@@ -1,5 +1,5 @@
 ---
-description: Shared code comes through # aliases in package.json imports, each directory's entry is index.ts, barrels keep imports few; never ../ out of a directory
+description: Shared code comes through # aliases in package.json imports, each src/ subfolder's entry is index.ts, barrels keep imports few; never ../ out of a directory
 ---
 
 ## `#` aliases
@@ -41,8 +41,10 @@ so they never reach package consumers.
 
 ## `index.ts` entries and barrels
 
-- Every directory's entry file is `index.ts`, never `mod.ts` (decided
+- Every `src/` subfolder's entry file is `index.ts`, never `mod.ts` (decided
   2026-10-12; import-check's `enforce-mod-file` now requires `index.ts`).
+  Folders outside `src/` have no entry file: `scripts/` is flat, has no
+  `index.ts`, and its files are imported directly by name.
 - A directory used from outside exposes its API through its `index.ts`
   barrel, and callers import the barrel (`#ui`), not files inside it
   (`no-barrel-bypass`).

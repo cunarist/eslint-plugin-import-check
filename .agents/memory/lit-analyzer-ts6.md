@@ -29,9 +29,9 @@ registerHooks({
 ```
 
 - Node runs the `.ts` script directly (type stripping), so no build step.
-- **Gotcha:** the obvious `await import("lit-analyzer/cli.js")` fails
-  `project/no-non-ts-imports` (a `.js` subpath). Import the package entry, or
-  spawn the package's bin with `node:child_process`, instead.
+- `project/no-asset-imports` allows a `.js` subpath such as
+  `lit-analyzer/cli.js`, but prefer the package entry or spawning the
+  package's bin with `node:child_process`.
 - CI runs `npm run lit-check` as its own step.
 - It is tooling under `scripts/`: no tests; a narrow `overrides` entry for it
   (e.g. `no-console`) is allowed if truly needed.

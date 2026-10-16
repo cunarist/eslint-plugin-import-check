@@ -12,11 +12,12 @@ practice.
   rule. It is not a precedent for apps.
 - **`scripts/**`:** a narrow override is allowed when a tooling script truly
   needs it, e.g. `no-console` in a CLI script.
-- **`vite.config.ts`** counts as tooling too. In import-check, which lints
-  itself with its own rules, `no-relative-bypass` is off for it alone so it
-  can import `./scripts/project-lint.ts`: aliases may only name `src/`
-  subfolders, and the user allows scripts and the config to import each other
-  relatively (2026-10-16).
+- **`vite.config.ts`** counts as tooling too, but needs no override: the
+  folder-layout rules only check imports from or into a `#` module, so it
+  imports `./scripts/project-lint.ts` relatively (2026-10-16).
+- **Never for size.** `max-lines` is not turned off anywhere, `scripts/**`
+  included; split the file. Every remaining override or opt-out carries a
+  one-line comment saying why.
 - **Generated files:** list them in `ignorePatterns`, never `overrides`.
 - **Anything else needs the user's approval first.** When the user is away,
   don't add it: refactor, or leave the violation failing and log the question.

@@ -3,13 +3,14 @@ description: Rules use ESLint's create API, typed ExplicitRule, with every visit
 ---
 
 Rules are plain ESLint rules: `meta` plus `create(context)`, never Oxlint's
-`createOnce`, and the package has no runtime dependencies beyond the `@eslint/core` types. A rule is typed
+`createOnce`. Its one `dependencies` entry, `@eslint/core`, is there for
+the public types only (see below). A rule is typed
 `ExplicitRule` from `#helpers`: `@eslint/core`'s `RuleDefinition`, with
 `TSESTree` nodes from `@typescript-eslint/types`, so `context.report` takes
 TypeScript nodes. The `Explicit*` names come from the template repo,
-eslint-plugin-explicit-types: `scripts/project-lint.ts` is copied from it
-unchanged and imports `ExplicitRuleTypes` and `ExplicitSourceCode`, so the
-names stay. The only runtime import is `node:fs`, which reads `package.json`.
+eslint-plugin-explicit-types: `scripts/project-lint-types.ts` builds on
+`ExplicitRuleTypes` and `ExplicitSourceCode`, so the names stay. The only
+runtime import is `node:fs`, which reads `package.json`.
 
 ESLint's visitor type is loose, so every visitor annotates its node parameter
 (`TSTypeOperator(node: TSESTree.TSTypeOperator): void`). Forget one and the

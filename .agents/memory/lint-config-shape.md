@@ -22,11 +22,12 @@ lint: {
 - **Default limits stay** (2026-10-16): pedantic's `max-lines` 300,
   `max-lines-per-function` 50, `max-classes-per-file` 1,
   `max-dependencies` 10, `max-params` 3, `complexity` 20. Don't raise them to
-  make code pass; refactor (see [[lint-overrides-policy]]). Apps follow this
-  strictly. The plugin template already turns off `max-lines`,
-  `max-lines-per-function`, `typescript/prefer-readonly-parameter-types`, and
-  `typescript/no-unsafe-enum-comparison` because AST visitors fight them; do
-  not add new opt-outs anywhere without asking the user.
+  make code pass; refactor (see [[lint-overrides-policy]]). `max-lines` is
+  never turned off, `scripts/` included: split a long file instead. The
+  plugin repos turn off `max-lines-per-function`,
+  `typescript/prefer-readonly-parameter-types`, and
+  `typescript/no-unsafe-enum-comparison` because AST visitors fight them, each
+  with a one-line reason; do not add new opt-outs without asking the user.
 - **`vite.config.ts` names no rule.** Every rule id, built-in ones included,
   lives in `configs.project` of `scripts/project-lint.ts`
   ([[project-lint-plugin]]). `vite.config.ts` only spreads configs.

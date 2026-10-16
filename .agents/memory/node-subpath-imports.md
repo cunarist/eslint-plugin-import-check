@@ -4,9 +4,9 @@ description: package.json imports replace deno.json imports; key order is the la
 
 `src/helpers/imports.ts` reads the nearest `package.json` `imports` with
 `node:fs` and `JSON.parse` (reading a file is not an import, so
-`project/no-non-ts-imports` is unaffected). `JSON.parse` keeps key order for
-`#` keys, which are never integer-like, so the layer order maps 1:1.
-`fmt.sortPackageJson` is off and npm leaves `imports` alone.
+`project/no-asset-imports` is unaffected). `JSON.parse` keeps key order for
+`#` keys, which are never integer-like, so the layer order maps 1:1. Neither
+Oxfmt's `package.json` sort nor npm reorders the keys inside `imports`.
 
 - Node.js has no trailing-slash folder mappings (`"#components/"`). They became
   subpath patterns, `"#components/*": "./src/components/*"`. A pattern whose

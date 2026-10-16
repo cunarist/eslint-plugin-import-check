@@ -15,6 +15,7 @@ docs/rules/no-keyof.md               the rule's docs page
 tests/configs.test.ts                regression tests via #plugin
 tests/package-meta.test.ts           meta vs package.json
 scripts/project-lint.ts              repo-local lint plugin, never published
+scripts/project-lint-*.ts            its rules and types, flat siblings
 ```
 
 - **Flat `src/rules/`**, no folder per preset, because a rule can belong to

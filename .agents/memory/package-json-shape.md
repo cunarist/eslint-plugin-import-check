@@ -1,12 +1,13 @@
 ---
-description: package.json key order is metadata, scripts, exports, imports, devDependencies, dependencies; standard fields only; no peerDependencies or packageManager
+description: package.json uses Oxfmt's standard key order (no sortPackageJson override); standard fields only; no peerDependencies or packageManager
 ---
 
-## Key order (2026-10-14)
+## Key order (2026-10-16)
 
-Metadata first, then `scripts`, `exports`, `imports`, `devDependencies`,
-`dependencies`. Oxfmt would re-sort the file, so `vite.config.ts` sets
-`fmt: { sortPackageJson: false }`; keep it, and keep the order by hand.
+Oxfmt's standard `package.json` sort decides the key order; `vite.config.ts`
+has no `fmt.sortPackageJson` setting, and `vp check --fix` applies the order.
+This replaced the earlier hand-written order (2026-10-14). The sort leaves the
+keys inside `imports` alone.
 
 ```jsonc
 {
@@ -16,20 +17,21 @@ Metadata first, then `scripts`, `exports`, `imports`, `devDependencies`,
   "keywords": ["eslint", "eslint-plugin", "eslintplugin", "oxlint"],
   "license": "MIT",
   "repository": { "type": "git", "url": "git+https://github.com/..." },
-  "type": "module",
   "files": ["dist"],
+  "type": "module",
+  "imports": { "#helpers": "./src/helpers/index.ts" },
+  "exports": { ".": "./dist/index.js" },
+  "scripts": { "docs": "eslint-doc-generator" },
+  "dependencies": {},
+  "devDependencies": { "vite-plus": "^1.1.0" },
   "engines": { "node": ">=22" },
   "eslint-doc-generator": {/* tool options that can only live here */},
-  "scripts": { "docs": "eslint-doc-generator" },
-  "exports": { ".": "./dist/index.js" },
-  "imports": { "#helpers": "./src/helpers/index.ts" },
-  "devDependencies": { "vite-plus": "^1.1.0" },
-  "dependencies": {},
 }
 ```
 
 The `imports` key order can carry meaning: import-check's
-`enforce-layer-order` reads it as the layer order. Never reorder it casually.
+`enforce-layer-order` reads it as the layer order. Never reorder it casually;
+Oxfmt does not sort it.
 
 ## Fields
 

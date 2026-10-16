@@ -21,10 +21,9 @@ imports only through `#` aliases, never a parent-relative `../src/...` (`no-pare
 plugin reaches the registry through `#rules` for the same reason.
 `vite.config.ts` imports the plugin through `#plugin` (its own
 `prefer-alias-import` rewrites a `./src/plugin/index.ts` path) and
-`./scripts/project-lint.ts` relatively; the second reaches past `./scripts`, so a narrow `overrides`
-entry turns `no-relative-bypass` off for `vite.config.ts` alone (tooling, like
-`scripts/**`, see [[lint-overrides-policy]]). Vite+ bundles the config and
-resolves both.
+`./scripts/project-lint.ts` relatively. The folder-layout rules check only
+imports from or into a `#` module, so neither import needs an override
+([[lint-overrides-policy]]). Vite+ bundles the config and resolves both.
 
 **Fixtures.** A rule that reads `package.json` needs a real path. A valid
 case may be `{ code, filename }` and an invalid case may set `filename`,
