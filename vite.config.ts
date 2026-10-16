@@ -1,7 +1,7 @@
 import { defineConfig } from "vite-plus";
 
-import importCheck from "#plugin";
-import projectLint from "#project-lint";
+import projectLint from "./scripts/project-lint.ts";
+import importCheck from "./src/index.ts";
 
 export default defineConfig({
   // Keep package.json in its hand-written order.
@@ -14,7 +14,12 @@ export default defineConfig({
     categories: { correctness: "error", suspicious: "error", pedantic: "error", perf: "error" },
     rules: { ...importCheck.configs.all.rules, ...projectLint.configs.project.rules },
     // File globs are config, not a rule list: the registry imports every rule.
-    overrides: [{ files: ["src/rules/index.ts"], rules: { "import/max-dependencies": "off" } }],
+    overrides: [
+      { files: ["src/rules/index.ts"], rules: { "import/max-dependencies": "off" } },
+      // Aliases name only src/ subfolders, so this config reaches scripts/ by
+      // relative path.
+      { files: ["vite.config.ts"], rules: { "@cunarist/import-check/no-relative-bypass": "off" } },
+    ],
     options: {
       typeAware: true,
       typeCheck: true,

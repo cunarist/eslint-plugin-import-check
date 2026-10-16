@@ -48,9 +48,9 @@
     ".": "./dist/index.js"
   },
   "imports": {
-    "#plugin": "./src/index.ts",
+    "#plugin": "./src/plugin/index.ts",
+    "#rules": "./src/rules/index.ts",
     "#testing": "./src/testing/index.ts",
-    "#project-lint": "./scripts/project-lint.ts",
     "#helpers": "./src/helpers/index.ts"
   },
   "devDependencies": {

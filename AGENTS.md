@@ -34,20 +34,24 @@ and follow it before reasoning or responding.
   registered in `src/rules/index.ts`.
 - Each rule file has one named export with a `Rule` suffix, e.g.
   `export const noSelfImportRule`. The package's only default export is the
-  plugin in `src/index.ts`; `scripts/project-lint.ts` default-exports its own.
-- Configs are lists of rule ids in `src/index.ts`. `all` is built from the
+  plugin, defined in `src/plugin/index.ts` and re-exported by the package
+  entry `src/index.ts`; `scripts/project-lint.ts` default-exports its own.
+- Configs are lists of rule ids in `src/plugin/index.ts`. `all` is built from the
   registry.
-- Shared code comes through `#` aliases, never a relative path out of a
-  directory. The `imports` key order is the layer order the repo's own
-  `enforce-layer-order` checks: `#plugin`, `#testing`, `#project-lint`,
-  `#helpers`. Source imports only `.ts` files, never JSON; rules read
+- Shared code in `src/` comes through `#` aliases, never a relative path out
+  of a directory. An alias may point only at a direct subfolder of `src/`
+  (`#testing`, `#helpers`), never at `src/` itself, a deeper folder, or
+  anything outside `src/`. The `imports` key order is the layer order the
+  repo's own `enforce-layer-order` checks: `#plugin`, `#rules`, `#testing`,
+  `#helpers`. Code outside `src/` uses relative paths: `vite.config.ts`
+  imports `./src/index.ts` and `./scripts/project-lint.ts`. Source imports only `.ts` files, never JSON; rules read
   `package.json` with `node:fs`.
-- `meta.name` and `meta.version` are written out in `src/index.ts`; a release
+- `meta.name` and `meta.version` are written out in `src/plugin/index.ts`; a release
   bumps them with `package.json`, and `tests/package-meta.test.ts` checks both.
 - Rules use ESLint's standard `create` API, typed `ExplicitRule`, with every
   visitor's node parameter annotated. Messages are one ESLint-style sentence.
 - Unit tests sit next to the code as `*.test.ts`. Regression and integration
-  tests go in `tests/` and use only the public entry, `#plugin`.
+  tests go in `tests/` and use only the plugin, through `#plugin`.
 - Every rule test runs under both ESLint's and Oxlint's `RuleTester` through
   `testRule`, called exactly once per rule file with every case in its `valid`
   and `invalid` lists. Write cases once, in ESLint's shape and 1-based columns.

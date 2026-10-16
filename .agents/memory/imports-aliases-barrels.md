@@ -26,6 +26,12 @@ so they never reach package consumers.
 
 - Deno's trailing-slash mappings (`"#components/"`) don't exist in Node; they
   become patterns, `"#components/*": "./src/components/*"`.
+- An alias may point only at a direct subfolder of `src/` (`"#helpers":
+  "./src/helpers/index.ts"`, or a `"#x/*"` pattern inside one such folder).
+  Never at `src/` itself (no `#plugin` for `./src/index.ts`), a deeper nested
+  folder, or anything outside `src/` (no `#project-lint` for a script). Code
+  outside `src/` (`scripts/`, `vite.config.ts`) uses relative paths
+  (user rule, 2026-10-16).
 - Aliases point at `.ts` files only. There is no `#package` alias
   ([[ts-only-files-and-imports]]).
 - In repos linted by import-check, the key order of `imports` is the layer

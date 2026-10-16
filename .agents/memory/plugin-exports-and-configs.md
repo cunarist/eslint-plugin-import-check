@@ -1,5 +1,5 @@
 ---
-description: The plugin is the package's only (default) export; one config per former Deno plugin plus all, no recommended; meta.name/version written out in src/index.ts
+description: The plugin is the package's only (default) export; one config per former Deno plugin plus all, no recommended; meta.name/version written out in src/plugin/index.ts
 ---
 
 ## Exports (2026-10-14)
@@ -10,7 +10,7 @@ description: The plugin is the package's only (default) export; one config per f
   `@cunarist/eslint-plugin-explicit-types` → `@cunarist/explicit-types`, so a
   rule id is `@cunarist/explicit-types/no-keyof`. Oxlint normalizes
   `meta.name` the same way (verified).
-- `meta.name` and `meta.version` are **written out** in `src/index.ts`, never
+- `meta.name` and `meta.version` are **written out** in `src/plugin/index.ts`, never
   imported from `package.json` (no non-`.ts` imports). A release bumps both;
   `tests/package-meta.test.ts` reads `package.json` with `node:fs` and fails
   on drift.
@@ -22,7 +22,7 @@ description: The plugin is the package's only (default) export; one config per f
   rule joins it by itself. `tests/configs.test.ts` checks `all` equals the
   union of the others.
 - **No `recommended`** config and no `meta.docs.recommended` flag.
-- A config is just a list of rule ids in `src/index.ts`, so one rule may sit
+- A config is just a list of rule ids in `src/plugin/index.ts`, so one rule may sit
   in several configs. Each config is a flat config object carrying the plugin:
 
   ```ts

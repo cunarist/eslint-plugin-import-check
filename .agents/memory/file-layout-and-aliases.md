@@ -1,5 +1,5 @@
 ---
-description: This repo's # alias order is #plugin, #testing, #project-lint, #helpers (its own layer order); rule tests read src/testing/fixture/ through fixture()
+description: This repo's # alias order is #plugin, #rules, #testing, #helpers (its own layer order), all src/ subfolders; vite.config.ts uses relative paths; rule tests read src/testing/fixture/ through fixture()
 ---
 
 The general layout is in [[plugin-layout-flat-rules]] and the alias rules in
@@ -7,11 +7,22 @@ The general layout is in [[plugin-layout-flat-rules]] and the alias rules in
 
 **Alias order is a layer order.** The repo's own `enforce-layer-order` reads
 the `package.json` `imports` key order as layers, top first, so the order is
-`#plugin`, `#testing`, `#project-lint`, `#helpers`: rules (owned by
-`#plugin`) and the harness import `#helpers` below them. `#project-lint`
-exists because `vite.config.ts` importing `./scripts/project-lint.ts` fails
-`no-relative-bypass`; `vite.config.ts` imports `#plugin` for the same reason
-(`prefer-alias-import`). Vite+ bundles the config and resolves both.
+`#plugin`, `#rules`, `#testing`, `#helpers`: the plugin imports the rule
+registry, rule tests import the harness, and everything imports `#helpers`.
+
+**Only `src/` subfolders get aliases** (user rule, 2026-10-16). The old
+`#plugin` pointed at `./src/index.ts` (`src/` itself) and `#project-lint` at
+`./scripts/project-lint.ts`; both broke the rule. The plugin moved to
+`src/plugin/index.ts`, which the new `#plugin` names, and the package entry
+`src/index.ts` only re-exports it, so `tests/` still imports `#plugin`
+instead of a parent-relative `../src/index.ts` (`no-parent-import`,
+`import/no-relative-parent-imports`, and no overrides for test code). The
+plugin reaches the registry through `#rules` for the same reason.
+`vite.config.ts` imports `./src/index.ts` and `./scripts/project-lint.ts`
+relatively; the second reaches past `./scripts`, so a narrow `overrides`
+entry turns `no-relative-bypass` off for `vite.config.ts` alone (tooling, like
+`scripts/**`, see [[lint-overrides-policy]]). Vite+ bundles the config and
+resolves both.
 
 **Fixtures.** A rule that reads `package.json` needs a real path. A valid
 case may be `{ code, filename }` and an invalid case may set `filename`,
