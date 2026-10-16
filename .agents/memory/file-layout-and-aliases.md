@@ -13,13 +13,15 @@ registry, rule tests import the harness, and everything imports `#helpers`.
 **Only `src/` subfolders get aliases** (user rule, 2026-10-16). The old
 `#plugin` pointed at `./src/index.ts` (`src/` itself) and `#project-lint` at
 `./scripts/project-lint.ts`; both broke the rule. The plugin moved to
-`src/plugin/index.ts`, which the new `#plugin` names, and the package entry
-`src/index.ts` only re-exports it, so `tests/` still imports `#plugin`
-instead of a parent-relative `../src/index.ts` (`no-parent-import`,
+`src/plugin/index.ts`, which the new `#plugin` names. `src/index.ts` was
+then deleted (user decision, 2026-10-16): `src/plugin/index.ts` is the
+package entry itself and `vp pack` names its output `dist/index.js`. `tests/`
+imports only through `#` aliases, never a parent-relative `../src/...` (`no-parent-import`,
 `import/no-relative-parent-imports`, and no overrides for test code). The
 plugin reaches the registry through `#rules` for the same reason.
-`vite.config.ts` imports `./src/index.ts` and `./scripts/project-lint.ts`
-relatively; the second reaches past `./scripts`, so a narrow `overrides`
+`vite.config.ts` imports the plugin through `#plugin` (its own
+`prefer-alias-import` rewrites a `./src/plugin/index.ts` path) and
+`./scripts/project-lint.ts` relatively; the second reaches past `./scripts`, so a narrow `overrides`
 entry turns `no-relative-bypass` off for `vite.config.ts` alone (tooling, like
 `scripts/**`, see [[lint-overrides-policy]]). Vite+ bundles the config and
 resolves both.

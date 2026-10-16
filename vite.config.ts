@@ -1,7 +1,8 @@
 import { defineConfig } from "vite-plus";
 
+import importCheck from "#plugin";
+
 import projectLint from "./scripts/project-lint.ts";
-import importCheck from "./src/index.ts";
 
 export default defineConfig({
   // Keep package.json in its hand-written order.
@@ -10,7 +11,7 @@ export default defineConfig({
     plugins: ["typescript", "unicorn", "oxc", "import"],
     // Lints itself from source; `scripts/project-lint.ts` holds the repo's own
     // rule list and repo-only rules, never published.
-    jsPlugins: ["./src/index.ts", "./scripts/project-lint.ts"],
+    jsPlugins: ["./src/plugin/index.ts", "./scripts/project-lint.ts"],
     categories: { correctness: "error", suspicious: "error", pedantic: "error", perf: "error" },
     rules: { ...importCheck.configs.all.rules, ...projectLint.configs.project.rules },
     // File globs are config, not a rule list: the registry imports every rule.
@@ -28,7 +29,8 @@ export default defineConfig({
     },
   },
   pack: {
-    entry: "src/index.ts",
+    // Built as dist/index.js, the file package.json "exports" names.
+    entry: { index: "src/plugin/index.ts" },
     dts: true,
     fixedExtension: false,
   },

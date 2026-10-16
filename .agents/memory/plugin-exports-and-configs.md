@@ -46,6 +46,6 @@ template declares `basePlugin: Plugin` (meta + rules) and a small
 `<Name>Plugin` interface with named configs (`<Name>Configs`) for the
 exported object; keep that shape.
 
-The repo lints itself from source: `vite.config.ts` loads `./src/index.ts` as
+The repo lints itself from source: `vite.config.ts` loads `./src/plugin/index.ts` as
 a `jsPlugins` entry and spreads `configs.all.rules`, so a new rule applies to
 the code that implements it immediately.

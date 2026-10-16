@@ -22,7 +22,9 @@ and follow it before reasoning or responding.
 
 ## Rules
 
-- `vp check`, `vp test`, and `vp pack` must all pass. `vp check --fix` formats.
+- `vp check`, `vp test`, and `vp pack` must all pass. `vp pack` builds
+  `src/plugin/index.ts` into `dist/index.js` and `dist/index.d.ts`, the files
+  `package.json` `exports` names. `vp check --fix` formats.
 - The only config files are `package.json`, `tsconfig.json`, and
   `vite.config.ts`, plus `package-lock.json`. Only `.ts` source files, configs
   included; there are no `.js`, `.mjs`, `.cjs`, `.jsx`, or `.tsx` files. The
@@ -34,8 +36,9 @@ and follow it before reasoning or responding.
   registered in `src/rules/index.ts`.
 - Each rule file has one named export with a `Rule` suffix, e.g.
   `export const noSelfImportRule`. The package's only default export is the
-  plugin, defined in `src/plugin/index.ts` and re-exported by the package
-  entry `src/index.ts`; `scripts/project-lint.ts` default-exports its own.
+  plugin, defined in `src/plugin/index.ts`, which is also the package entry
+  (there is no `src/index.ts`); `scripts/project-lint.ts` default-exports its
+  own.
 - Configs are lists of rule ids in `src/plugin/index.ts`. `all` is built from the
   registry.
 - Shared code in `src/` comes through `#` aliases, never a relative path out
@@ -44,7 +47,8 @@ and follow it before reasoning or responding.
   anything outside `src/`. The `imports` key order is the layer order the
   repo's own `enforce-layer-order` checks: `#plugin`, `#rules`, `#testing`,
   `#helpers`. Code outside `src/` uses relative paths: `vite.config.ts`
-  imports `./src/index.ts` and `./scripts/project-lint.ts`. Source imports only `.ts` files, never JSON; rules read
+  imports the plugin through `#plugin` (`prefer-alias-import` requires it)
+  and `./scripts/project-lint.ts` by relative path. Source imports only `.ts` files, never JSON; rules read
   `package.json` with `node:fs`.
 - `meta.name` and `meta.version` are written out in `src/plugin/index.ts`; a release
   bumps them with `package.json`, and `tests/package-meta.test.ts` checks both.
@@ -64,7 +68,7 @@ and follow it before reasoning or responding.
 - The repo lints itself with its own rules. Lint disable and enable comments
   (`eslint-*` or `oxlint-*`, any form) fail `vp check`; fix the source.
 - `vite.config.ts` lists no rule by name: its `rules` spreads
-  `configs.all.rules` from `src/index.ts` and `configs.project.rules` from
+  `configs.all.rules` from `src/plugin/index.ts` and `configs.project.rules` from
   `scripts/project-lint.ts`. Only `overrides`, being file globs, stays there.
 - Every rule has a `docs/rules/<rule>.md` in the ESLint core layout: Rule
   Details, incorrect/correct examples, and When Not To Use It. `npm run docs`

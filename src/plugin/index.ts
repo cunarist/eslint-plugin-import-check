@@ -9,6 +9,8 @@
  * `all`, which turns on every rule. The plugin is the only export; its configs
  * are at `plugin.configs`.
  *
+ * This file is the package entry: `vp pack` builds it as `dist/index.js`.
+ *
  * @module
  */
 
