@@ -5,8 +5,6 @@ import importCheck from "#plugin";
 import projectLint from "./scripts/project-lint.ts";
 
 export default defineConfig({
-  // Keep package.json in its hand-written order.
-  fmt: { sortPackageJson: false },
   lint: {
     plugins: ["typescript", "unicorn", "oxc", "import"],
     // Lints itself from source; `scripts/project-lint.ts` holds the repo's own
@@ -14,7 +12,7 @@ export default defineConfig({
     jsPlugins: ["./src/plugin/index.ts", "./scripts/project-lint.ts"],
     categories: { correctness: "error", suspicious: "error", pedantic: "error", perf: "error" },
     rules: { ...importCheck.configs.all.rules, ...projectLint.configs.project.rules },
-    // File globs are config, not a rule list: the registry imports every rule.
+    // The rule registry must import every rule, more than max-dependencies allows.
     overrides: [{ files: ["src/rules/index.ts"], rules: { "import/max-dependencies": "off" } }],
     options: {
       typeAware: true,
