@@ -8,9 +8,9 @@ const internalCode = 'import { internal } from "./components/internal.ts";\n';
 
 testRule("no-relative-bypass", noRelativeBypassRule, {
   valid: [
-    // allows a sibling and a child entry point, either name
+    // allows a sibling and a child entry point
     {
-      code: 'import { helper } from "./helper.ts";\nimport { components } from "./components/index.ts";\nimport { legacy } from "./components/mod.ts";\n',
+      code: 'import { helper } from "./helper.ts";\nimport { components } from "./components/index.ts";\n',
       filename: SRC,
     },
 
@@ -37,6 +37,15 @@ testRule("no-relative-bypass", noRelativeBypassRule, {
           data: { specifier: "./components/internal.ts", folder: "components" },
           ...spanOf(internalCode, '"./components/internal.ts"'),
         },
+      ],
+    },
+
+    // treats a child mod file as an internal file, not an entry point
+    {
+      code: 'import { legacy } from "./components/mod.ts";\n',
+      filename: SRC,
+      errors: [
+        { messageId: "bypass", data: { specifier: "./components/mod.ts", folder: "components" } },
       ],
     },
 

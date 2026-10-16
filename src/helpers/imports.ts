@@ -10,15 +10,12 @@ import { isInsideDir, normalizePath, parentDir, resolveFrom, stemName } from "./
 
 /**
  * File name stems that mark a directory's public entry point. Compared
- * without the extension so `.ts`, `.tsx`, `.js` and friends all count.
+ * without the extension so `.ts`, `.tsx`, `.js` and friends all count. Only
+ * `index` qualifies; a Deno-style `mod` file is a plain module.
  */
-export const BARREL_STEMS: string[] = ["index", "mod"];
+export const BARREL_STEMS: string[] = ["index"];
 
-/**
- * Barrel stems the `enforce-mod-file` rule rejects. They stay in
- * `BARREL_STEMS` so a project that turns that rule off still has its entry
- * points recognized.
- */
+/** Entry-point stems the `enforce-mod-file` rule rejects. */
 export const REJECTED_STEMS: string[] = ["mod"];
 
 /** The config file searched for in every directory up from a file. */

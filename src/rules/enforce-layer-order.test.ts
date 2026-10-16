@@ -35,6 +35,9 @@ testRule("enforce-layer-order", enforceLayerOrderRule, {
     // a file entry owns only itself, not its whole directory
     { code: upwardCode, filename: fixture("src/other.ts") },
 
+    // a mod file is a plain file entry, so its folder stays unowned
+    { code: upwardCode, filename: fixture("src/legacy/helper.ts") },
+
     // leaves a substituted backtick specifier alone, since nothing is known
     {
       code: "const n = 'components';\nconst m = await import(`#${n}`);\nexport const x = m;\n",
@@ -48,6 +51,13 @@ testRule("enforce-layer-order", enforceLayerOrderRule, {
     { code: upwardCode, filename: fixture("src/utils/vendored/index.ts") },
   ],
   invalid: [
+    // a mod file entry still owns itself
+    {
+      code: upwardCode,
+      filename: fixture("src/legacy/mod.ts"),
+      errors: [{ messageId: "upward", data: { owner: "#legacy", target: "#components" } }],
+    },
+
     // rejects importing a module declared above
     {
       code: upwardCode,

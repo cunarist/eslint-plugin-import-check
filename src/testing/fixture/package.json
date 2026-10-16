@@ -5,6 +5,7 @@
     "#components/*": "./src/components/*",
     "#utils": "./src/utils/index.ts",
     "#types": "./src/types/index.ts",
+    "#legacy": "./src/legacy/mod.ts",
     "#lit": "lit",
     "#/*": "./src/*"
   }

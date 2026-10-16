@@ -11,6 +11,6 @@ The rule id stays `enforce-mod-file` because the port keeps every Deno rule
 name. The name now says the opposite of what the rule does; renaming it (e.g.
 `enforce-index-file`) is an open question for the user.
 
-`BARREL_STEMS` holds both `index` and `mod`, so `no-relative-bypass` and the
-layer rules still recognize a `mod` entry point when `enforce-mod-file` is off,
-mirroring how Deno kept `index` recognized.
+`BARREL_STEMS` holds only `index` (user rule, 2026-10-16): no rule accepts a
+`mod` file as an entry point, even with `enforce-mod-file` off. A `#` entry
+pointing at `mod.ts` owns only that file, and `./sub/mod.ts` is a bypass.

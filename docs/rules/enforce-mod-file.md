@@ -20,8 +20,9 @@ on Node.js it requires `index.ts` and rejects `mod`.
   target and update the specifier.
 - Package specifiers are never checked: a package may ship whatever file names
   it likes.
-- Turning this rule off still leaves `mod` recognized as an entry point by
-  [`no-relative-bypass`](no-relative-bypass.md) and the layer rules.
+- No rule treats `mod` as an entry point. With this rule off,
+  [`no-relative-bypass`](no-relative-bypass.md) and the layer rules still see
+  a `mod` file as a plain module.
 
 Examples of **incorrect** code for this rule:
 
@@ -40,4 +41,5 @@ import { html } from "some-package/mod.ts";
 
 ## When Not To Use It
 
-If your project names its entry points `mod.ts`, turn this rule off.
+If your project has files named `mod` that are not meant as entry points,
+turn this rule off. The plugin does not support `mod.ts` entry points.

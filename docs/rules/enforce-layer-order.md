@@ -23,8 +23,9 @@ detectable, and the `imports` map doubles as documentation of the layers.
 }
 ```
 
-- An entry that points at an entry-point file (`index` or `mod`) owns its
-  whole folder; an entry that points at any other file owns only that file.
+- An entry that points at an `index` file, with any extension, owns its whole
+  folder; an entry that points at any other file, `mod.ts` included, owns
+  only that file.
   A file belongs to the most specific entry that owns it, and files no entry
   owns, such as scripts, are never checked.
 - A target is resolved whether it is written as an exact alias, a subpath

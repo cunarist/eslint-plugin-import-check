@@ -16,7 +16,8 @@ reach another module: a sibling file, or a `#` entry.
 
 - A sibling, `./helper.ts`, is always allowed.
 - A child entry point, `./sub/index.ts`, is allowed. An entry point is matched
-  by stem, so `index` or `mod` with any extension counts.
+  by stem, so `index` with any extension counts. A `mod` file is not an entry
+  point.
 - Anything else in a subfolder, or anything two or more levels down, fires.
   Import the folder's `index.ts` and re-export what you need from there.
 - `../`, `#`, and package specifiers are left to other rules.
