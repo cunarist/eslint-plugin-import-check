@@ -12,9 +12,9 @@ practice.
   rule. It is not a precedent for apps.
 - **`scripts/**`:** a narrow override is allowed when a tooling script truly
   needs it, e.g. `no-console` in a CLI script.
-- **`vite.config.ts`** counts as tooling too, but needs no override: the
-  folder-layout rules only check imports from or into a `#` module, so it
-  imports `./scripts/project-lint.ts` relatively (2026-10-16).
+- **`vite.config.ts`** counts as tooling too, but needs no override: no
+  alias owns `scripts/project-lint.ts`, so it imports it as
+  `./scripts/project-lint.ts` (unowned files import `./` paths freely).
 - **Never for size.** `max-lines` is not turned off anywhere, `scripts/**`
   included; split the file. Every remaining override or opt-out carries a
   one-line comment saying why.

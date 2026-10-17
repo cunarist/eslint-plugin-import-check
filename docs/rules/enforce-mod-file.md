@@ -20,13 +20,12 @@ on Node.js it requires `index.ts` and rejects `mod`.
   target and update the specifier.
 - Package specifiers are never checked: a package may ship whatever file names
   it likes.
-- Only folders a `#` entry owns are modules (see
-  [Modules](../../README.md#modules)). A `mod` file outside them, and an
-  import between two files outside them, such as
-  `./scripts/mod.ts` from `vite.config.ts`, are left alone.
-- No rule treats `mod` as an entry point. With this rule off,
-  [`no-relative-bypass`](no-relative-bypass.md) and the layer rules still see
-  a `mod` file as a plain module.
+- Only areas an alias owns have entry points (see
+  [Modules](../../README.md#modules)). A `mod` file no alias owns, and an
+  import between two such files, such as `./scripts/mod.ts` from
+  `vite.config.ts`, are left alone.
+- No rule treats `mod` as an entry point. With this rule off, an alias to a
+  `mod` file still owns only that file.
 
 Examples of **incorrect** code for this rule:
 

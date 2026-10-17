@@ -29,10 +29,11 @@ and follow it before reasoning or responding.
   `vite.config.ts`, plus `package-lock.json`. Only `.ts` source files, configs
   included; there are no `.js`, `.mjs`, `.cjs`, `.jsx`, or `.tsx` files. The
   only other JSON files are the rule-test fixtures under
-  `src/testing/fixture/`: its `package.json` and a nested one that proves the
-  config lookup stops at the nearest `package.json`, as Node.js does.
-- Every `src/` subfolder's entry file is `index.ts`; folders outside `src/`
-  have none (`scripts/` is flat, with no `index.ts`). Every rule lives flat in
+  `src/testing/fixture/`: its `package.json`, a nested one that proves the
+  config lookup stops at the nearest `package.json`, as Node.js does, and the
+  `owned/` and `overlap/` projects that pin the alias ownership rule.
+- Entry files are `index.ts` only, and only where an alias targets a
+  folder; `scripts/` is flat, with no `index.ts`. Every rule lives flat in
   `src/rules/<rule-id>.ts`, tested in `src/rules/<rule-id>.test.ts` and
   registered in `src/rules/index.ts`.
 - Each rule file has one named export with a `Rule` suffix, e.g.
@@ -42,16 +43,16 @@ and follow it before reasoning or responding.
   own.
 - Configs are lists of rule ids in `src/plugin/index.ts`. `all` is built from the
   registry.
-- Shared code in `src/` comes through `#` aliases, never a relative path out
-  of a directory. An alias may point only at a direct subfolder of `src/`
-  (`#testing`, `#helpers`), never at `src/` itself, a deeper folder, or
-  anything outside `src/`. The `imports` key order is the layer order the
-  repo's own `enforce-layer-order` checks: `#plugin`, `#rules`, `#testing`,
-  `#helpers`. Code outside `src/` uses relative paths: `vite.config.ts`
-  imports the plugin through `#plugin` (`prefer-alias-import` requires it)
-  and `./scripts/project-lint.ts` by relative path, which the folder-layout
-  rules allow because neither file lies in a `#` module. Imports name `.ts`
-  files (or `.js` package subpaths), never JSON or other assets
+- Aliases follow one rule, with no folder names in it: an alias owns its
+  target (a folder's `index.ts` owns that folder and everything below it;
+  any other file owns only itself), no file is owned by 2 aliases, code
+  outside an area reaches it only through the exact alias, relative imports
+  inside an area are free, and `../` is banned in every file. This repo's
+  aliases, in layer order (`enforce-layer-order`): `#plugin`, `#rules`,
+  `#testing`, `#helpers`. `vite.config.ts` imports the plugin through
+  `#plugin` and `./scripts/project-lint.ts` by path, free because no alias
+  owns `scripts/`; `jsPlugins` stay path strings. Imports name `.ts` files
+  (or `.js` package subpaths), never JSON or other assets
   (`project/no-asset-imports`); rules read `package.json` with `node:fs`.
 - `meta.name` and `meta.version` are written out in `src/plugin/index.ts`; a release
   bumps them with `package.json`, and `tests/package-meta.test.ts` checks both.
