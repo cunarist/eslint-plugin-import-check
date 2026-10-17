@@ -78,5 +78,18 @@ testRule("no-relative-bypass", noRelativeBypassRule, {
         { messageId: "bypass", data: { specifier: "./src/utils/sub/b.ts", alias: "#utils" } },
       ],
     },
+
+    // treats type-only imports like any other import
+    {
+      code: 'import type { Internal } from "./components/internal.ts";\nexport type { X } from "./components/x.ts";\n',
+      filename: SRC,
+      errors: [
+        {
+          messageId: "bypass",
+          data: { specifier: "./components/internal.ts", alias: "#components" },
+        },
+        { messageId: "bypass", data: { specifier: "./components/x.ts", alias: "#components" } },
+      ],
+    },
   ],
 });

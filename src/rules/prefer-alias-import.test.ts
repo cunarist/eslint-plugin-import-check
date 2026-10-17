@@ -38,5 +38,18 @@ testRule("prefer-alias-import", preferAliasImportRule, {
         { messageId: "useAlias", data: { specifier: "./app-store.ts", alias: "#app-store" } },
       ],
     },
+
+    // treats a type-only import like any other import
+    {
+      code: 'import { type C } from "./components/index.ts";\n',
+      filename: SRC,
+      output: 'import { type C } from "#components";\n',
+      errors: [
+        {
+          messageId: "useAlias",
+          data: { specifier: "./components/index.ts", alias: "#components" },
+        },
+      ],
+    },
   ],
 });

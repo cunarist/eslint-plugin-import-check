@@ -90,5 +90,24 @@ testRule("no-barrel-bypass", noBarrelBypassRule, {
         },
       ],
     },
+
+    // treats a type-only import like any other import
+    {
+      code: 'import type { Internal } from "#components/internal.ts";\n',
+      filename: APP_STORE,
+      errors: [
+        {
+          messageId: "bypass",
+          data: { specifier: "#components/internal.ts", owner: "#components" },
+          suggestions: [
+            {
+              messageId: "useEntry",
+              data: { owner: "#components" },
+              output: 'import type { Internal } from "#components";\n',
+            },
+          ],
+        },
+      ],
+    },
   ],
 });

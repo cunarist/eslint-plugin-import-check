@@ -108,5 +108,27 @@ testRule("enforce-layer-order", enforceLayerOrderRule, {
       filename: INTERNAL,
       errors: [ownEntry("./index.ts")],
     },
+
+    // treats type-only imports and re-exports like any other import
+    {
+      code: 'import type { Thing } from "#components";\nexport type { Thing };\n',
+      filename: UTILS,
+      errors: [upward("#components")],
+    },
+    {
+      code: 'import { type Thing } from "#components";\nexport type { Thing };\n',
+      filename: UTILS,
+      errors: [upward("#components")],
+    },
+    {
+      code: 'export type { Thing } from "#components";\n',
+      filename: UTILS,
+      errors: [upward("#components")],
+    },
+    {
+      code: 'import type { X } from "./index.ts";\nexport type { X };\n',
+      filename: INTERNAL,
+      errors: [ownEntry("./index.ts")],
+    },
   ],
 });

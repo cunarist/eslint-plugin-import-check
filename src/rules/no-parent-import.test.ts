@@ -96,5 +96,13 @@ testRule("no-parent-import", noParentImportRule, {
         { messageId: "useAlias", data: { specifier: "../src/utils/index.ts", alias: "#utils" } },
       ],
     },
+
+    // treats a type-only import like any other import
+    {
+      code: 'import type { Utils } from "../utils/index.ts";\n',
+      filename: COMPONENTS,
+      output: 'import type { Utils } from "#utils";\n',
+      errors: [TO_UTILS],
+    },
   ],
 });
