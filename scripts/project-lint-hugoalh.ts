@@ -27,14 +27,19 @@ type LoopStatement =
 
 /**
  * A rule that reports an operator applied twice in a row, such as
- * `await await x`, and fixes it by dropping the outer keyword.
+ * `await await x`. When `safeFix` is set, dropping the outer keyword gives
+ * the same value, so the rule fixes it; otherwise it only reports.
  */
-function doubledOperatorRule(keyword: "await" | "typeof" | "void", effect: string): ProjectRule {
+function doubledOperatorRule(
+  keyword: "await" | "typeof" | "void",
+  effect: string,
+  safeFix: boolean,
+): ProjectRule {
   return {
     meta: {
       type: "problem",
       docs: { description: `Disallow \`${keyword}\` applied twice in a row` },
-      fixable: "code",
+      ...(safeFix ? { fixable: "code" as const } : {}),
       schema: [],
       messages: { doubled: `Multiple \`${keyword}\`s ${effect}, possibly not intended.` },
     },
@@ -55,7 +60,7 @@ function doubledOperatorRule(keyword: "await" | "typeof" | "void", effect: strin
             end: context.sourceCode.getLocFromIndex(range[1]),
           },
           messageId: "doubled",
-          fix: (fixer): RuleTextEdit => fixer.removeRange(range),
+          ...(safeFix ? { fix: (fixer): RuleTextEdit => fixer.removeRange(range) } : {}),
         });
       }
       return keyword === "await" ? { AwaitExpression: check } : { UnaryExpression: check };
@@ -67,18 +72,24 @@ function doubledOperatorRule(keyword: "await" | "typeof" | "void", effect: strin
 export const noDuplicateAwaitsRule: ProjectRule = doubledOperatorRule(
   "await",
   "have the same effect as a single `await`",
+  true,
 );
 
-/** `no-duplicate-typeofs` - `typeof typeof x` is always `"string"`. */
+/**
+ * `no-duplicate-typeofs` - `typeof typeof x` is always `"string"`. Not
+ * fixed, since dropping one `typeof` changes the value.
+ */
 export const noDuplicateTypeofsRule: ProjectRule = doubledOperatorRule(
   "typeof",
   'always return `"string"`',
+  false,
 );
 
 /** `no-duplicate-voids` - `void void x` is the same as `void x`. */
 export const noDuplicateVoidsRule: ProjectRule = doubledOperatorRule(
   "void",
   "have the same effect as a single `void`",
+  true,
 );
 
 /** `no-empty-yield` - a `yield` with no expression, likely missing one. */
@@ -209,23 +220,31 @@ export const noUnsafeNumberRule: ProjectRule = {
   },
 };
 
-/** The unlabeled `continue` a loop ends with, and the node a fix removes. */
+/**
+ * The unlabeled `continue` a loop ends with, and whether removing it is a
+ * safe fix: it is in a block, rather than the loop's whole body.
+ */
 function trailingContinue(
   node: LoopStatement,
-): { statement: TSESTree.ContinueStatement; removed: TSESTree.Node } | null {
+): { statement: TSESTree.ContinueStatement; removable: boolean } | null {
   if (node.body.type === "BlockStatement") {
     const last = node.body.body.at(-1);
     return last?.type === "ContinueStatement" && last.label === null
-      ? { statement: last, removed: last }
+      ? { statement: last, removable: true }
       : null;
   }
   if (node.body.type === "ContinueStatement" && node.body.label === null) {
-    return { statement: node.body, removed: node };
+    return { statement: node.body, removable: false };
   }
   return null;
 }
 
-/** `no-useless-continue` - an unlabeled `continue` that ends a loop body. */
+/**
+ * `no-useless-continue` - an unlabeled `continue` that ends a loop body. A
+ * trailing `continue;` in a block is removed by the fix. A loop whose whole
+ * body is `continue;` is only reported: hugoalh's fix deleted the loop,
+ * header side effects included.
+ */
 export const noUselessContinueRule: ProjectRule = {
   meta: {
     type: "suggestion",
@@ -243,7 +262,9 @@ export const noUselessContinueRule: ProjectRule = {
         context.report({
           node: found.statement,
           messageId: "useless",
-          fix: (fixer): RuleTextEdit => fixer.remove(found.removed),
+          ...(found.removable
+            ? { fix: (fixer): RuleTextEdit => fixer.remove(found.statement) }
+            : {}),
         });
       }
     }
