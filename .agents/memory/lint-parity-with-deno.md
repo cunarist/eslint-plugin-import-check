@@ -1,5 +1,5 @@
 ---
-description: deno-import-check's deno.json lint config is mapped: prefer-ascii as a project rule, hugoalh recommended to built-ins, no-external-import skipped by the user
+description: deno-import-check's deno.json lint config is mapped: prefer-ascii and the hugoalh recommended rules Oxlint lacks as project rules, the rest of hugoalh recommended to built-ins, no-external-import skipped by the user
 ---
 
 `configs.project` in `scripts/project-lint.ts` started as the template's
@@ -32,9 +32,14 @@ with no options (excluding `hugoalh/no-duplicate-imports` and
   `no-else-return`, `no-useless-empty-export`, `no-unused-expressions`,
   `unicorn/no-useless-switch-case`, `no-unneeded-ternary`, `no-useless-catch`;
   `curly` covers `prefer-statement-block`.
-- No built-in, so not carried over: `no-duplicate-awaits`, `-interfaces`,
-  `-typeofs`, `-types`, `-voids`, `no-empty-yield`, `no-enum`,
-  `no-modifier-private`, `no-nan`, `no-useless-continue`, `no-useless-type`.
+- No built-in, so ported as repo-local rules under their hugoalh names
+  (`project/<name>`): `no-duplicate-awaits`, `no-duplicate-typeofs`,
+  `no-duplicate-voids`, `no-empty-yield`, `no-enum`, `no-nan`,
+  `no-unsafe-number` (`no-loss-of-precision` misses literals such as `1e300`)
+  and `no-useless-continue` in `scripts/project-lint-hugoalh.ts`;
+  `no-duplicate-interfaces`, `no-duplicate-types`, `no-modifier-private` and
+  `no-useless-type` in `scripts/project-lint-hugoalh-types.ts`. A gap is not
+  an acceptable end state ([[lint-parity-never-shrinks]]).
 
 Before removing a line from `configs.project`, find what else covers it
 ([[lint-parity-never-shrinks]]). `maxWarnings: 0` keeps Deno's

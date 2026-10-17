@@ -76,6 +76,7 @@ and follow it before reasoning or responding.
   repo-local `project` plugin: `scripts/project-lint.ts` holds the plugin and
   rule list and imports its rules from flat siblings
   (`project-lint-source.ts`, `project-lint-modules.ts`,
+  `project-lint-hugoalh.ts`, `project-lint-hugoalh-types.ts`,
   `project-lint-types.ts`). `scripts/` is repo tooling, flat, never packed or
   published, and has no tests.
 - Source files are ASCII only (`project/prefer-ascii`, Deno's
