@@ -11,7 +11,7 @@ import {
 } from "#helpers";
 
 /**
- * `prefer-alias-import` — requires the `#` alias when a `./` specifier names
+ * `prefer-alias-import` - requires the `#` alias when a `./` specifier names
  * the exact target of an alias from outside that alias's area, a same-folder
  * sibling included. An alias owns its target, so its target has one spelling
  * everywhere outside it.

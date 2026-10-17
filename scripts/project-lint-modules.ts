@@ -44,7 +44,7 @@ function isAssetSource(source: string): boolean {
 }
 
 /**
- * `no-asset-imports` — rejects importing anything but a `.ts`, `.js`, `.mts`,
+ * `no-asset-imports` - rejects importing anything but a `.ts`, `.js`, `.mts`,
  * or `.mjs` module (the last three cover package subpaths such as
  * `lit/decorators.js` or `pdfjs-dist/legacy/build/pdf.mjs`): a source path,
  * static or a dynamic `import()` with a string literal, ending in another

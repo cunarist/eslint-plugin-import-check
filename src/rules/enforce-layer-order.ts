@@ -11,7 +11,7 @@ import {
 } from "#helpers";
 
 /**
- * `enforce-layer-order` — treats the order of `#` aliases in `package.json`
+ * `enforce-layer-order` - treats the order of `#` aliases in `package.json`
  * `imports` as the layer order, top layer first: an area may only import
  * aliases declared below its own. Also rejects a file that imports its own
  * area's alias, by alias or by path, and a file that two aliases claim.

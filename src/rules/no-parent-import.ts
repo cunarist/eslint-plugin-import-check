@@ -11,7 +11,7 @@ import {
 } from "#helpers";
 
 /**
- * `no-parent-import` — rejects `../` specifiers in every file, owned by an
+ * `no-parent-import` - rejects `../` specifiers in every file, owned by an
  * alias or not, rewriting one to its `#` alias where `package.json` declares
  * an alias for exactly that file.
  *

@@ -1,5 +1,5 @@
 /**
- * `@cunarist/eslint-plugin-modules` — import rules that keep a module
+ * `@cunarist/eslint-plugin-modules` - import rules that keep a module
  * graph free of cycles and clearly layered, with the order of the
  * `package.json` `imports` field as the layer order.
  *
@@ -22,7 +22,7 @@ import { rules } from "#rules";
 const NAMESPACE = "@cunarist/modules";
 
 /**
- * The `modules` preset — every rule the plugin was ported with.
+ * The `modules` preset - every rule the plugin was ported with.
  *
  * Bans the import patterns that create cycles, keeps every module behind one
  * entry point, layers modules by their `package.json` `imports` order, and

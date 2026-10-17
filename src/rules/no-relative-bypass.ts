@@ -8,7 +8,7 @@ import {
 } from "#helpers";
 
 /**
- * `no-relative-bypass` — rejects a `./` specifier that reaches into an area
+ * `no-relative-bypass` - rejects a `./` specifier that reaches into an area
  * an alias owns from outside that area.
  *
  * An alias owns its target: an alias to a folder's `index.ts` owns that

@@ -206,7 +206,7 @@ function reportImportOrder(
 }
 
 /**
- * `enforce-import-order` — groups imports as packages, then `#` aliases, then
+ * `enforce-import-order` - groups imports as packages, then `#` aliases, then
  * relative paths, separated by a blank line and each sorted by code point.
  * Names inside the braces are sorted too, ignoring case and any `type`
  * modifier.

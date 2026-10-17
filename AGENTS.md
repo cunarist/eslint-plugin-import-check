@@ -70,9 +70,13 @@ and follow it before reasoning or responding.
 - Rules this repo enforces on itself but does not publish live in the
   repo-local `project` plugin: `scripts/project-lint.ts` holds the plugin and
   rule list and imports its rules from flat siblings
-  (`project-lint-comments.ts`, `project-lint-modules.ts`,
+  (`project-lint-source.ts`, `project-lint-modules.ts`,
   `project-lint-types.ts`). `scripts/` is repo tooling, flat, never packed or
   published, and has no tests.
+- Source files are ASCII only (`project/prefer-ascii`, Deno's
+  `prefer-ascii`); write `-` or `,` instead of an em dash. Functions take at
+  most 4 parameters (`max-params`) and stay at or under a complexity of 32
+  (`complexity`), hugoalh's defaults from the old Deno config.
 - The repo lints itself with its own rules. Lint disable and enable comments
   (`eslint-*` or `oxlint-*`, any form) fail `vp check`; fix the source.
 - `vite.config.ts` lists no rule by name: its `rules` spreads

@@ -12,7 +12,7 @@ import {
 } from "#helpers";
 
 /**
- * `no-barrel-bypass` — rejects a `#` specifier deeper than an alias, such as
+ * `no-barrel-bypass` - rejects a `#` specifier deeper than an alias, such as
  * `#components/internal.ts` beside `#components`, whether or not a subpath
  * pattern makes it resolve, and any use of a subpath pattern that reaches
  * into an owned area.
