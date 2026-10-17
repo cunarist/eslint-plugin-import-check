@@ -44,6 +44,25 @@ testRule("no-barrel-bypass", noBarrelBypassRule, {
       ],
     },
 
+    // rejects a deeper specifier of an exact alias even with no pattern for it
+    {
+      code: 'import { x } from "#utils/x.ts";\n',
+      filename: APP_STORE,
+      errors: [
+        {
+          messageId: "bypass",
+          data: { specifier: "#utils/x.ts", owner: "#utils" },
+          suggestions: [
+            {
+              messageId: "useEntry",
+              data: { owner: "#utils" },
+              output: 'import { x } from "#utils";\n',
+            },
+          ],
+        },
+      ],
+    },
+
     // rejects a catch-all pattern, which has no entry point to suggest
     {
       code: 'import { utils } from "#/utils/index.ts";\n',

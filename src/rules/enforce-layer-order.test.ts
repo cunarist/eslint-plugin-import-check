@@ -89,6 +89,13 @@ testRule("enforce-layer-order", enforceLayerOrderRule, {
       errors: [upward("#components")],
     },
 
+    // reports once at the top of a file two aliases claim
+    {
+      code: "export const x = 1;\n",
+      filename: fixture("overlap/a/sub/x.ts"),
+      errors: [{ messageId: "overlap", data: { aliases: "#a, #a-sub" }, line: 1, column: 1 }],
+    },
+
     // rejects a module importing its own entry point, by alias or by path
     { code: upwardCode, filename: INTERNAL, errors: [ownEntry("#components")] },
     {
