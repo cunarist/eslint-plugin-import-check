@@ -35,6 +35,12 @@ and follow it before reasoning or responding.
   `src/testing/fixture/`: its `package.json`, a nested one that proves the
   config lookup stops at the nearest `package.json`, as Node.js does, and the
   `owned/` and `overlap/` projects that pin the alias ownership rule.
+- `tsconfig.json` turns on exactly `strict`, `noUncheckedIndexedAccess`,
+  `noPropertyAccessFromIndexSignature`, `noImplicitReturns`,
+  `noUnusedLocals`, `noUnusedParameters`, `noImplicitOverride`,
+  `noFallthroughCasesInSwitch`, and `erasableSyntaxOnly`, plus the mechanical
+  flags and `declaration`/`isolatedDeclarations`. `exactOptionalPropertyTypes`
+  stays off.
 - Entry files are `index.ts` only, and only where an alias targets a
   folder; `scripts/` is flat, with no `index.ts`. Every rule lives flat in
   `src/rules/<rule-id>.ts`, tested in `src/rules/<rule-id>.test.ts` and
