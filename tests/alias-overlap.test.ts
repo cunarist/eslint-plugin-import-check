@@ -3,7 +3,9 @@
  * alias's area and two aliases with the same target both make some file
  * belong to two areas. Lint cannot report on `package.json`, so
  * `enforce-layer-order` fires once at the top of every file two aliases
- * claim, and leaves every other file alone.
+ * claim, and leaves every other file alone. The other rules count such a
+ * file as inside every area that claims it, so the overlap is the only
+ * report.
  */
 
 import plugin from "#plugin";
@@ -56,4 +58,21 @@ testRule("enforce-layer-order", rule("enforce-layer-order"), {
     // two file aliases with the same target
     { code: CODE, filename: overlap("e.ts"), errors: claimedBy("#e, #e2") },
   ],
+});
+
+/** One import of `specifier`, linted as `filename`. */
+function importing(specifier: string, filename: string): { code: string; filename: string } {
+  return { code: `import { x } from "${specifier}";\n`, filename };
+}
+
+testRule("no-relative-bypass", rule("no-relative-bypass"), {
+  // d/file.ts is claimed by #d too, so d/ is not outside its area
+  valid: [importing("./x.ts", overlap("d/file.ts")), importing("./sub/y.ts", overlap("d/file.ts"))],
+  invalid: [],
+});
+
+testRule("prefer-alias-import", rule("prefer-alias-import"), {
+  // d/index.ts is #d's own entry point, left to enforce-layer-order
+  valid: [importing("./index.ts", overlap("d/file.ts"))],
+  invalid: [],
 });

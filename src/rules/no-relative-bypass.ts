@@ -3,6 +3,7 @@ import {
   type ExplicitRule,
   findImportsConfig,
   findOwningEntry,
+  isClaimedBy,
   resolveLocalSpecifier,
   visitSpecifiers,
 } from "#helpers";
@@ -43,7 +44,7 @@ export const noRelativeBypassRule: ExplicitRule = {
         return;
       }
       const target = findOwningEntry(config, resolved);
-      if (target === null || findOwningEntry(config, context.filename)?.index === target.index) {
+      if (target === null || isClaimedBy(config, context.filename, target)) {
         return;
       }
       context.report({ node, messageId: "bypass", data: { specifier, alias: target.specifier } });

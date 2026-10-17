@@ -114,6 +114,15 @@ testRule("no-relative-bypass", rule("no-relative-bypass"), {
       ...importing("./a/sub/deep.ts", MAIN),
       errors: [{ messageId: "bypass", data: { specifier: "./a/sub/deep.ts", alias: "#a" } }],
     },
+    // a directory specifier names the folder an alias owns
+    {
+      ...importing("./a", MAIN),
+      errors: [{ messageId: "bypass", data: { specifier: "./a", alias: "#a" } }],
+    },
+    {
+      ...importing("./a/", MAIN),
+      errors: [{ messageId: "bypass", data: { specifier: "./a/", alias: "#a" } }],
+    },
     {
       ...importing("./y/z/w.ts", owned("src/x/other.ts")),
       errors: [{ messageId: "bypass", data: { specifier: "./y/z/w.ts", alias: "#deep" } }],

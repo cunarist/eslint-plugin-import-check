@@ -18,9 +18,16 @@ import {
 } from "./imports.ts";
 import { isInsideDir, normalizePath, parentDir, resolveFrom } from "./paths.ts";
 
-/** Whether a normalized path lies in the area an alias owns. */
+/**
+ * Whether a normalized path lies in the area an alias owns. A folder alias's
+ * area includes the folder path itself, so a directory specifier such as
+ * `./utils` cannot reach the area by path.
+ */
 function ownsPath(entry: ModuleEntry, path: string): boolean {
-  return entry.target === path || (entry.isBarrel && isInsideDir(path, entry.dir));
+  return (
+    entry.target === path ||
+    (entry.isBarrel && (path === entry.dir || isInsideDir(path, entry.dir)))
+  );
 }
 
 /**
@@ -30,6 +37,15 @@ function ownsPath(entry: ModuleEntry, path: string): boolean {
 export function claimingEntries(config: ImportsConfig, filePath: string): ModuleEntry[] {
   const path = normalizePath(filePath);
   return config.entries.filter((entry) => ownsPath(entry, path));
+}
+
+/**
+ * Whether `entry` is among the aliases that claim a file. A file two aliases
+ * overlap on counts as inside both areas, so the overlap is reported once by
+ * `enforce-layer-order` rather than again as a bypass.
+ */
+export function isClaimedBy(config: ImportsConfig, filePath: string, entry: ModuleEntry): boolean {
+  return claimingEntries(config, filePath).some((claimant) => claimant.index === entry.index);
 }
 
 /**

@@ -4,7 +4,7 @@ import {
   docsUrl,
   type ExplicitRule,
   findImportsConfig,
-  findOwningEntry,
+  isClaimedBy,
   quoteLike,
   resolveLocalSpecifier,
   visitSpecifiers,
@@ -42,11 +42,7 @@ export const noParentImportRule: ExplicitRule = {
       const entry = resolved === null ? undefined : config?.byTarget.get(resolved);
       // The alias of the importing file's own area is no fix: that import is
       // a cycle, which "enforce-layer-order" reports.
-      if (
-        config === null ||
-        entry === undefined ||
-        findOwningEntry(config, context.filename)?.index === entry.index
-      ) {
+      if (config === null || entry === undefined || isClaimedBy(config, context.filename, entry)) {
         context.report({ node, messageId: "parentImport", data: { specifier } });
         return;
       }
