@@ -14,7 +14,7 @@ and follow it before reasoning or responding.
 - The package's only export is the default one, the plugin. Configs live at
   `plugin.configs`: `modules` and `all` (every rule, built from the rule
   registry). No `recommended`, no named exports.
-- Runs on Node.js 22+; Bun is not a supported target. Built with Vite+ (`vp`):
+- Runs on Node.js 22.18+; Bun is not a supported target. Built with Vite+ (`vp`):
   Oxlint, Oxfmt, type checking, Vitest, tsdown.
 - Ported from the lint plugin of `jsr:@cunarist/deno-import-check` (its
   `./lint` entry). The published plugin mirrors exactly its 11 rules, nothing
@@ -98,7 +98,7 @@ and follow it before reasoning or responding.
   Details, incorrect/correct examples, and When Not To Use It. `npm run docs`
   regenerates the headers and the README rules list after `vp pack`.
 - Never add a second import sorter beside `enforce-import-order`.
-- CI runs every rule test, ESLint and Oxlint halves alike, on node@22 and
+- CI runs every rule test, ESLint and Oxlint halves alike, on node@22.18.0 and
   node@latest. Bun is not tested and not supported.
 - `package.json` keys follow Oxfmt's standard sort (`vp check --fix`); there
   is no `fmt.sortPackageJson` setting. The keys inside `imports` keep the

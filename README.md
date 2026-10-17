@@ -1,7 +1,7 @@
 # eslint-plugin-modules
 
 Import-structure rules for both [ESLint](https://eslint.org) and [Oxlint](https://oxc.rs/docs/guide/usage/linter): a module graph that stays layered and free of cycles.\
-Install with `npm install --save-dev @cunarist/eslint-plugin-modules`. Requires Node.js 22+.
+Install with `npm install --save-dev @cunarist/eslint-plugin-modules`. Requires Node.js 22.18+.
 
 ```ts
 // Oxlint, through Vite+: vite.config.ts

@@ -35,4 +35,4 @@ PR. The old `deno-*` repo keeps its history and is archived only after the npm
 package is published.
 
 Every README says the plugin targets both ESLint and Oxlint, and states
-"Node.js 22+".
+"Node.js 22.18+".
