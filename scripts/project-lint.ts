@@ -64,8 +64,6 @@ const rules: DummyRuleMap = {
   "typescript/prefer-readonly-parameter-types": "off",
   "typescript/no-unsafe-enum-comparison": "off",
   "typescript/switch-exhaustiveness-check": ["error", { considerDefaultExhaustiveForUnions: true }],
-  // Rule `create` visitors and the package.json reader run past 50 lines.
-  "max-lines-per-function": "off",
 };
 
 /**

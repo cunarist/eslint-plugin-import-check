@@ -89,7 +89,10 @@ and follow it before reasoning or responding.
   layer order. There is no `packageManager` field; npm is detected from
   `package-lock.json`.
 - Every file stays under Oxlint's default `max-lines` of 300; split a long
-  file rather than turning the rule off. The only `overrides` entry is the
+  file rather than turning the rule off. Every function likewise stays under
+  `max-lines-per-function`'s default of 50, rule `create` functions and
+  visitors included; split one into named helpers that take the context,
+  source, and plain data as arguments. The only `overrides` entry is the
   rule registry's `import/max-dependencies`.
 - Only CI publishes, from a published GitHub release `vX.Y.Z` that matches
   `package.json`. Use the `release` skill and ask the user first.
