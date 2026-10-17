@@ -43,9 +43,3 @@ import { b } from "#ui/dialog";
 // after: one barrel
 import { a, b } from "#ui";
 ```
-
-Measured on memona before the move (Oxlint 1.87, default limits): 921
-pedantic hits in 274 files, of which `max-lines-per-function` 206,
-`max-lines` 145, `max-classes-per-file` 59, `max-dependencies` 45 (median 14
-imports, worst 29). The user chose refactoring over raising limits or
-matching memona's old hugoalh limits (2048 lines per file, no function limit).

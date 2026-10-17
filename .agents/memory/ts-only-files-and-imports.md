@@ -1,5 +1,5 @@
 ---
-description: Every file is .ts (no js/mjs/cjs/jsx/tsx, configs included); imports name .ts files or .js/.mts/.mjs package subpaths, never assets; CSS comes from HTML, JSON/SVG become .ts modules
+description: Every file is .ts (no js/mjs/cjs/jsx/tsx, configs included); imports name .ts files or .js/.mts/.mjs package subpaths, never assets; JSON data becomes .ts modules
 ---
 
 The user's rule, from the Deno days and restated for Node (2026-10-12): "No
@@ -39,11 +39,7 @@ import { scenes } from "#data/scenes"; // yes: scenes.ts
 
 ## What to do instead
 
-- **CSS:** load it from HTML with `<link rel="stylesheet" href="...">`. Never
-  import CSS from TS, not even for Vite. (This also removes most of the
-  `import/no-unassigned-import` hits the `suspicious` category reports.)
 - **JSON data:** turn it into a `.ts` module exporting a typed constant.
-- **SVG:** a `.ts` module exporting a Lit template; see [[icons-memona-style]].
 - **`package.json` fields at runtime:** never `import pkg from
   "./package.json"` and there is no `#package` alias. Write the value out in
   `.ts` and add a test in `tests/` that reads `package.json` with `node:fs`
@@ -51,4 +47,4 @@ import { scenes } from "#data/scenes"; // yes: scenes.ts
 - **Reading a file is not importing it.** `readFileSync` + `JSON.parse` is
   fine in tooling and tests.
 - **A tool's `.js` entry:** `import("pkg/cli.js")` passes the rule now, but
-  prefer the package entry or spawning its bin ([[lit-analyzer-ts6]]).
+  prefer the package entry or spawning its bin.
