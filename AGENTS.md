@@ -55,7 +55,7 @@ and follow it before reasoning or responding.
   `#testing`, `#helpers`. `vite.config.ts` imports the plugin through
   `#plugin` and `./scripts/project-lint.ts` by path, free because no alias
   owns `scripts/`; `jsPlugins` stay path strings. Imports name `.ts` files
-  (or `.js` package subpaths), never JSON or other assets
+  (or `.js`, `.mts`, `.mjs` package subpaths), never JSON or other assets
   (`project/no-asset-imports`); rules read `package.json` with `node:fs`.
 - `meta.name` and `meta.version` are written out in `src/plugin/index.ts`; a release
   bumps them with `package.json`, and `tests/package-meta.test.ts` checks both.

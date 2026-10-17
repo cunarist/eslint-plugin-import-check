@@ -1,5 +1,5 @@
 ---
-description: Every file is .ts (no js/mjs/cjs/jsx/tsx, configs included); imports name .ts files or .js package subpaths, never assets; CSS comes from HTML, JSON/SVG become .ts modules
+description: Every file is .ts (no js/mjs/cjs/jsx/tsx, configs included); imports name .ts files or .js/.mts/.mjs package subpaths, never assets; CSS comes from HTML, JSON/SVG become .ts modules
 ---
 
 The user's rule, from the Deno days and restated for Node (2026-10-12): "No
@@ -12,19 +12,21 @@ plain `.ts`. Build output in a gitignored folder is the only JS.
 `noUncheckedIndexedAccess`). If a tool or framework seems to need a JS or TSX
 file, stop and flag it instead of adding one.
 
-## No asset imports (2026-10-14, widened 2026-10-16)
+## No asset imports (2026-10-14, widened 2026-10-16 and 2026-10-17)
 
 `project/no-asset-imports` (in `scripts/project-lint-modules.ts`; it was
 `no-non-ts-imports` before 2026-10-16) fails:
 
 - a relative, absolute, `#`, or package-subpath specifier whose last segment
-  has an extension other than `.ts` or `.js`: `.css`, `.json`, `.svg`,
-  `.mjs`, `.tsx`;
+  has an extension other than `.ts`, `.js`, `.mts`, or `.mjs`: `.css`,
+  `.json`, `.svg`, `.jsx`, `.tsx`, and every other asset;
 - any `?query` suffix (`?raw`, `?url`, `?inline`);
 - any import attributes (`with { type: "json" }`, `with { type: "text" }`).
 
-`.js` is allowed for package subpaths such as `lit/decorators.js`; our own
-files are still `.ts` only. Bare packages (`lit`, `@types/json-schema`,
+`.js`, `.mts`, and `.mjs` are allowed (user decision, 2026-10-17) for package
+subpaths such as `lit/decorators.js` or `pdfjs-dist/legacy/build/pdf.mjs`;
+our own files are still `.ts` only. `.jsx` and `.tsx` stay banned. Extensions
+are matched whole, so `.cjs` and `.cts` stay banned too. Bare packages (`lit`, `@types/json-schema`,
 `lodash.debounce`), `#` aliases, and `node:` builtins pass.
 `@fortawesome/x/svgs/a.svg` fails.
 
