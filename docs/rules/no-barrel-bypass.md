@@ -1,8 +1,8 @@
-# @cunarist/import-check/no-barrel-bypass
+# @cunarist/modules/no-barrel-bypass
 
 📝 Disallow `#` specifiers deeper than an alias.
 
-💼 This rule is enabled in the 🧭 `import-check` [config](https://github.com/cunarist/eslint-plugin-import-check#configs-and-rules).
+💼 This rule is enabled in the 🧭 `modules` [config](https://github.com/cunarist/eslint-plugin-modules#configs-and-rules).
 
 💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 

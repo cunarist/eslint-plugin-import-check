@@ -1,8 +1,8 @@
-# @cunarist/import-check/no-parent-import
+# @cunarist/modules/no-parent-import
 
 📝 Disallow parent-relative module specifiers.
 
-💼 This rule is enabled in the 🧭 `import-check` [config](https://github.com/cunarist/eslint-plugin-import-check#configs-and-rules).
+💼 This rule is enabled in the 🧭 `modules` [config](https://github.com/cunarist/eslint-plugin-modules#configs-and-rules).
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 

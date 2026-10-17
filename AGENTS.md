@@ -7,18 +7,21 @@ and follow it before reasoning or responding.
 
 ## Project
 
-- **@cunarist/eslint-plugin-import-check**: import rules that keep a module
+- **@cunarist/eslint-plugin-modules**: import rules that keep a module
   graph layered and free of cycles, with the order of `package.json` `imports`
   as the layer order. One ESLint plugin that also runs under Oxlint. Namespace
-  `@cunarist/import-check`, 11 rules in one config, `import-check`.
+  `@cunarist/modules`, 11 rules in one config, `modules`.
 - The package's only export is the default one, the plugin. Configs live at
-  `plugin.configs`: `import-check` and `all` (every rule, built from the rule
+  `plugin.configs`: `modules` and `all` (every rule, built from the rule
   registry). No `recommended`, no named exports.
 - Runs on Node.js 22+; Bun is not a supported target. Built with Vite+ (`vp`):
   Oxlint, Oxfmt, type checking, Vitest, tsdown.
 - Ported from the lint plugin of `jsr:@cunarist/deno-import-check` (its
   `./lint` entry). The published plugin mirrors exactly its 11 rules, nothing
   added or removed. Its CLI was not ported.
+- Renamed from `@cunarist/eslint-plugin-import-check` (namespace
+  `@cunarist/import-check`, config `import-check`) on 2026-10-17. Rule names
+  did not change.
 
 ## Rules
 

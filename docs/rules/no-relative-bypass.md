@@ -1,8 +1,8 @@
-# @cunarist/import-check/no-relative-bypass
+# @cunarist/modules/no-relative-bypass
 
 📝 Disallow relative specifiers that reach into an alias's area from outside it.
 
-💼 This rule is enabled in the 🧭 `import-check` [config](https://github.com/cunarist/eslint-plugin-import-check#configs-and-rules).
+💼 This rule is enabled in the 🧭 `modules` [config](https://github.com/cunarist/eslint-plugin-modules#configs-and-rules).
 
 <!-- end auto-generated rule header -->
 

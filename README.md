@@ -1,29 +1,29 @@
-# eslint-plugin-import-check
+# eslint-plugin-modules
 
 Import-structure rules for both [ESLint](https://eslint.org) and [Oxlint](https://oxc.rs/docs/guide/usage/linter): a module graph that stays layered and free of cycles.\
-Install with `npm install --save-dev @cunarist/eslint-plugin-import-check`. Requires Node.js 22+.
+Install with `npm install --save-dev @cunarist/eslint-plugin-modules`. Requires Node.js 22+.
 
 ```ts
 // Oxlint, through Vite+: vite.config.ts
-import plugin from "@cunarist/eslint-plugin-import-check";
+import plugin from "@cunarist/eslint-plugin-modules";
 import { defineConfig } from "vite-plus";
-const rules = { ...plugin.configs["import-check"].rules };
+const rules = { ...plugin.configs.modules.rules };
 export default defineConfig({
-  lint: { jsPlugins: ["@cunarist/eslint-plugin-import-check"], rules },
+  lint: { jsPlugins: ["@cunarist/eslint-plugin-modules"], rules },
 });
 ```
 
 ```ts
 // ESLint 9: eslint.config.ts (loading a .ts config needs jiti)
-import plugin from "@cunarist/eslint-plugin-import-check";
+import plugin from "@cunarist/eslint-plugin-modules";
 import { parser } from "typescript-eslint";
 const ts = { files: ["**/*.ts"], languageOptions: { parser } };
-export default [ts, plugin.configs["import-check"]];
+export default [ts, plugin.configs.modules];
 ```
 
 ## Configs and rules
 
-- `import-check`: areas reached only through their `package.json` `imports` aliases, layered by their order.
+- `modules`: areas reached only through their `package.json` `imports` aliases, layered by their order.
 - `all`: every rule, including ones added later. Rules take no options.
 
 The order of the `#` aliases in `package.json` is the layer order, top first; an area may only import aliases declared below its own.
@@ -67,8 +67,8 @@ The other rules (import order, duplicate sources, wildcards, absolute paths, sel
 <!-- prettier-ignore-start -->
 <!-- begin auto-generated rules list -->
 
-💼 [Configurations](https://github.com/cunarist/eslint-plugin-import-check#configs-and-rules) enabled in.\
-🧭 Set in the `import-check` [configuration](https://github.com/cunarist/eslint-plugin-import-check#configs-and-rules).
+💼 [Configurations](https://github.com/cunarist/eslint-plugin-modules#configs-and-rules) enabled in.\
+🧭 Set in the `modules` [configuration](https://github.com/cunarist/eslint-plugin-modules#configs-and-rules).
 
 | Name                                                                   | Description                                                                  | 💼 |
 | :--------------------------------------------------------------------- | :--------------------------------------------------------------------------- | :- |
