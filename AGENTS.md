@@ -38,8 +38,9 @@ and follow it before reasoning or responding.
 - `tsconfig.json` turns on exactly `strict`, `noUncheckedIndexedAccess`,
   `noPropertyAccessFromIndexSignature`, `noImplicitReturns`,
   `noUnusedLocals`, `noUnusedParameters`, `noImplicitOverride`,
-  `noFallthroughCasesInSwitch`, and `erasableSyntaxOnly`, plus the mechanical
-  flags and `declaration`/`isolatedDeclarations`. `exactOptionalPropertyTypes`
+  `noFallthroughCasesInSwitch`, and `erasableSyntaxOnly`, sets
+  `allowUnreachableCode` and `allowUnusedLabels` to `false`, plus the
+  mechanical flags and `declaration`/`isolatedDeclarations`. `exactOptionalPropertyTypes`
   stays off.
 - Entry files are `index.ts` only, and only where an alias targets a
   folder; `scripts/` is flat, with no `index.ts`. Every rule lives flat in
