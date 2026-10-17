@@ -40,7 +40,7 @@ The rule never depends on folder or file names; an alias may point anywhere.
 - Inside an area, relative imports of siblings and subfolders are free.
 - `../` is banned in every file, owned or not (`no-parent-import`). Anything above a file needs an alias.
 - Files no alias owns need no `index.ts` and no alias, and import `./` siblings and subfolders freely.
-- No `/*` subpath patterns; entry points are named `index.ts` only.
+- Don't declare `/*` subpath patterns: any use of one that reaches an owned area is a bypass (`no-barrel-bypass`). Entry points are named `index.ts` only (`enforce-mod-file`).
 
 ```jsonc
 "imports": {

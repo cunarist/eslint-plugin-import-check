@@ -14,7 +14,10 @@ owns that folder and everything below it, and an alias to any other file
 owns only that file. Code outside an area reaches it only through the alias.
 
 - A `./` specifier fires when it lands in an area the importing file is not
-  in. It names the alias to import instead.
+  in. It names the alias to import instead. A folder alias's area includes
+  the folder path itself, so a directory specifier such as `./a` fires too.
+- A file 2 aliases claim counts as inside both areas, so only
+  `enforce-layer-order` reports the overlap.
 - Inside an area, siblings and subfolders at any depth are free.
 - Files no alias owns are free from anywhere, and no `index.ts` is demanded
   of their folders.
@@ -29,6 +32,7 @@ Examples of **incorrect** code for this rule:
 // "#a": "./a/index.ts", in main.ts
 import { one } from "./a/one.ts";
 import { deep } from "./a/sub/deep.ts";
+import { a } from "./a";
 ```
 
 Examples of **correct** code for this rule:
